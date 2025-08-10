@@ -1,6 +1,11 @@
 @import '@styles/variables.scss';
 @import '@styles/mixins.scss';
 
+@font-face {
+  font-family: 'font4';
+  src: url('/fonts/font-17.ttf') format('truetype');
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -13,8 +18,8 @@ html, body {
   font-size: $font-size-base;
   color: $text-primary;
   background: $bg-dark;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  //-webkit-font-smoothing: antialiased;
+  //-moz-osx-font-smoothing: grayscale;
 }
 
 #root {

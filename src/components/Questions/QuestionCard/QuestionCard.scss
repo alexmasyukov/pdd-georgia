@@ -9,6 +9,8 @@
   flex-direction: column;
   overflow: hidden;
   width: 854px;
+  font-family: 'font4', sans-serif;
+  color: #e8e6e3;
 
   &__image-section {
     position: relative;
@@ -37,7 +39,7 @@
     top: 14px;
     left: 18px;
     background: $bg-number;
-    color: $text-primary;
+    //color: $text-primary;
     font-size: $font-size-base;
     padding: 0;
     height: 20px;
@@ -53,7 +55,7 @@
     padding: $spacing-md;
     text-align: center;
     font-size: 16px;
-    color: $text-primary;
+    //color: $text-primary;
     display: flex;
     align-items: center;
     justify-content: center;
