@@ -1,0 +1,14 @@
+
+dist
+coverage/
+node_modules/
+package-lock.json
+package.json
+.DS_Store
+
+**/.git
+**/.svn
+**/.hg
+**/node_modules
+
+**/*.js/OLD/

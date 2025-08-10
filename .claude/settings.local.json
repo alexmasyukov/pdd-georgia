@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node:*)",
+      "Bash(yarn add:*)",
+      "Bash(mkdir:*)",
+      "Bash(yarn dev)",
+      "Bash(yarn lint)",
+      "mcp__ide__getDiagnostics",
+      "WebFetch(domain:localhost)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_console_messages",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_network_requests",
+      "mcp__playwright__browser_snapshot"
+    ],
+    "deny": []
+  }
+}

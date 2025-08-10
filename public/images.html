@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Images</title>
+</head>
+<body>
+    <div id="images"></div>
+    <script>
+        fetch('http://localhost:5173/ru.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('images');
+                let a = 0;
+                data.forEach(item => {
+                    if (item.hasImg === 1) {
+                        a++;
+                        // const img = document.createElement('img');
+                        // img.src = `https://starti.ge/exam/${item.img}`;
+                        // container.appendChild(img);
+                    }
+                });
+              console.log(`Количество изображений: ${a}`);
+            });
+    </script>
+</body>
+</html>

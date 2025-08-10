@@ -1,0 +1,118 @@
+@import '@styles/variables.scss';
+@import '@styles/mixins.scss';
+
+.category-list {
+  padding: $spacing-lg;
+  
+  &__title {
+    margin-bottom: $spacing-lg;
+    font-weight: 500;
+    color: $primary-color;
+  }
+  
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+}
+
+.category-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: $category-incomplete !important;
+  
+  &.completed {
+    background-color: rgba($category-complete, 0.1) !important;
+    
+    .category-item__title {
+      color: darken($category-complete, 10%);
+    }
+  }
+  
+  &.active {
+    border: 2px solid $primary-color;
+  }
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+  
+  &__content {
+    padding: $spacing-md !important;
+  }
+  
+  &__title {
+    font-size: $font-size-base;
+    font-weight: 500;
+    margin-bottom: $spacing-sm;
+    line-height: 1.3;
+  }
+  
+  &__total {
+    color: #666;
+    margin-bottom: $spacing-sm;
+  }
+  
+  &__stats {
+    display: flex;
+    gap: $spacing-md;
+    margin-top: $spacing-sm;
+    flex-wrap: wrap;
+  }
+  
+  &__stat-link {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $border-radius-sm;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: $font-size-sm;
+    
+    &:nth-child(1) {
+      background-color: rgba($favorite-color, 0.1);
+      color: darken($favorite-color, 20%);
+      
+      svg {
+        color: $favorite-color;
+      }
+      
+      &:hover {
+        background-color: rgba($favorite-color, 0.2);
+      }
+    }
+    
+    &:nth-child(2) {
+      background-color: rgba($known-color, 0.1);
+      color: darken($known-color, 20%);
+      
+      svg {
+        color: $known-color;
+      }
+      
+      &:hover {
+        background-color: rgba($known-color, 0.2);
+      }
+    }
+    
+    &:nth-child(3) {
+      background-color: rgba($hard-color, 0.1);
+      color: darken($hard-color, 20%);
+      
+      svg {
+        color: $hard-color;
+      }
+      
+      &:hover {
+        background-color: rgba($hard-color, 0.2);
+      }
+    }
+  }
+  
+  &__status {
+    margin-top: $spacing-sm;
+  }
+}

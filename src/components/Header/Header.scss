@@ -1,0 +1,41 @@
+@import '@styles/variables.scss';
+@import '@styles/mixins.scss';
+
+.header {
+  background-color: $primary-color !important;
+  height: $header-height;
+
+  &__toolbar {
+    height: $header-height;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__title {
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  &__nav {
+    display: flex;
+    gap: $spacing-sm;
+    
+    @include mobile {
+      display: none;
+    }
+  }
+
+  &__nav-item {
+    text-transform: none;
+    font-weight: 400;
+    
+    &.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
