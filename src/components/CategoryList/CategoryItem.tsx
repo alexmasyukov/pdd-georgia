@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, Typography, Box, Chip } from '@mui/material';
 import { Star, CheckCircle, Flame } from 'lucide-react';
 import type { Category, CategoryStats } from '@types';
-import './CategoryList.scss';
 
 interface CategoryItemProps {
   category: Category;
@@ -19,64 +18,64 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ category, stats, isActive }
   };
 
   return (
-    <Card 
-      className={`category-item ${stats.isCompleted ? 'completed' : ''} ${isActive ? 'active' : ''}`}
-      onClick={handleCategoryClick}
-    >
-      <CardContent className="category-item__content">
-        <Typography variant="h6" className="category-item__title">
-          {category.name}
-        </Typography>
-        
-        <Typography variant="body2" className="category-item__total">
-          Всего вопросов: {stats.total}
-        </Typography>
-        
-        <Box className="category-item__stats">
-          {stats.favorites > 0 && (
-            <Link 
-              to={`/category/${category.id}/favorites`}
-              className="category-item__stat-link"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Star size={16} />
-              <span>{stats.favorites}</span>
-            </Link>
-          )}
-          
-          {stats.known > 0 && (
-            <Link 
-              to={`/category/${category.id}/known`}
-              className="category-item__stat-link"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <CheckCircle size={16} />
-              <span>{stats.known}</span>
-            </Link>
-          )}
-          
-          {stats.hard > 0 && (
-            <Link 
-              to={`/category/${category.id}/hard`}
-              className="category-item__stat-link"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Flame size={16} />
-              <span>{stats.hard}</span>
-            </Link>
-          )}
-        </Box>
-        
-        {stats.isCompleted && (
-          <Chip 
-            label="Изучено" 
-            color="success" 
-            size="small" 
-            className="category-item__status"
-          />
+    <Box>
+      <Card 
+        onClick={handleCategoryClick}
+        sx={{ 
+          cursor: 'pointer',
+          border: isActive ? 2 : 0,
+          borderColor: 'primary.main',
+          bgcolor: stats.isCompleted ? 'success.dark' : 'grey.800',
+          '&:hover': {
+            transform: 'translateY(-2px)',
+            boxShadow: 3
+          },
+          transition: 'all 0.3s ease'
+        }}
+      >
+        <CardContent sx={{ pb: 1 }}>
+          <Typography variant="subtitle1">
+            {category.name}
+          </Typography>
+        </CardContent>
+      </Card>
+      
+      <Box display="flex" justifyContent="flex-end" gap={2} mt={1} mr={1} flexWrap="wrap">
+        {stats.favorites > 0 && (
+          <Typography
+            component={Link}
+            to={`/category/${category.id}/favorites`}
+            variant="body2"
+            color="text.secondary"
+            sx={{ textDecoration: 'none', '&:hover': { color: 'warning.main' } }}
+          >
+            избранное ({stats.favorites})
+          </Typography>
         )}
-      </CardContent>
-    </Card>
+        {stats.known > 0 && (
+          <Typography
+            component={Link}
+            to={`/category/${category.id}/known`}
+            variant="body2"
+            color="text.secondary"
+            sx={{ textDecoration: 'none', '&:hover': { color: 'success.main' } }}
+          >
+            знаю ({stats.known})
+          </Typography>
+        )}
+        {stats.hard > 0 && (
+          <Typography
+            component={Link}
+            to={`/category/${category.id}/hard`}
+            variant="body2"
+            color="text.secondary"
+            sx={{ textDecoration: 'none', '&:hover': { color: 'error.main' } }}
+          >
+            сложные ({stats.hard})
+          </Typography>
+        )}
+      </Box>
+    </Box>
   );
 };
 

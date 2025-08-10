@@ -6,7 +6,6 @@ import LocalStorageService from '@services/LocalStorageService';
 import PaginationService from '@services/PaginationService';
 import type { Question } from '@types';
 import { scrollToTop } from '@utils/helpers';
-import './QuestionList.scss';
 
 interface QuestionListProps {
   questions: Question[];
@@ -61,11 +60,11 @@ const QuestionList: React.FC<QuestionListProps> = ({
 
   if (questions.length === 0) {
     return (
-      <Box className="question-list__empty">
-        <Typography variant="h6">
+      <Box sx={{ textAlign: 'center', py: 4 }}>
+        <Typography variant="h6" gutterBottom>
           Нет вопросов для отображения
         </Typography>
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant="body2" color="text.secondary">
           Выберите категорию или добавьте вопросы в списки
         </Typography>
       </Box>
@@ -73,11 +72,11 @@ const QuestionList: React.FC<QuestionListProps> = ({
   }
 
   return (
-    <Box className="question-list">
+    <Box>
       {(title || showCategoryToggle) && (
-        <Box className="question-list__header">
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           {title && (
-            <Typography variant="h5" className="question-list__title">
+            <Typography variant="h5">
               {title}
             </Typography>
           )}
@@ -91,13 +90,12 @@ const QuestionList: React.FC<QuestionListProps> = ({
                 />
               }
               label="Категория изучена"
-              className="question-list__toggle"
             />
           )}
         </Box>
       )}
 
-      <Box className="question-list__items">
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         {paginatedData.items.map((question, index) => (
           <QuestionCard
             key={question.id}

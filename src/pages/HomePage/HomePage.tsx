@@ -1,33 +1,31 @@
 import React from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 import { Book } from 'lucide-react';
-import './HomePage.scss';
-
 const HomePage: React.FC = () => {
   return (
-    <Box className="home-page">
-      <Paper className="home-page__welcome">
-        <Box className="home-page__icon">
+    <Box>
+      <Paper sx={{ p: 4, textAlign: 'center' }}>
+        <Box sx={{ mb: 3 }}>
           <Book size={64} />
         </Box>
-        <Typography variant="h4" className="home-page__title">
+        <Typography variant="h4" gutterBottom>
           Добро пожаловать в тестирование ПДД Грузии
         </Typography>
-        <Typography variant="body1" className="home-page__description">
+        <Typography variant="body1" color="text.secondary" paragraph>
           Выберите категорию слева для начала тестирования
         </Typography>
-        <Box className="home-page__features">
+        <Box sx={{ mt: 4, textAlign: 'left' }}>
           <Typography variant="h6" gutterBottom>
             Возможности приложения:
           </Typography>
-          <ul className="home-page__list">
-            <li>Тестирование по категориям ПДД</li>
-            <li>Добавление вопросов в избранное для повторения</li>
-            <li>Отметка вопросов, которые вы точно знаете</li>
-            <li>Выделение сложных вопросов для дополнительной практики</li>
-            <li>Подсказки и объяснения к каждому вопросу</li>
-            <li>Отслеживание прогресса по категориям</li>
-          </ul>
+          <Box component="ul" sx={{ pl: 2 }}>
+            <Typography component="li" variant="body1">✓ Тестирование по категориям ПДД</Typography>
+            <Typography component="li" variant="body1">✓ Добавление вопросов в избранное для повторения</Typography>
+            <Typography component="li" variant="body1">✓ Отметка вопросов, которые вы точно знаете</Typography>
+            <Typography component="li" variant="body1">✓ Выделение сложных вопросов для дополнительной практики</Typography>
+            <Typography component="li" variant="body1">✓ Подсказки и объяснения к каждому вопросу</Typography>
+            <Typography component="li" variant="body1">✓ Отслеживание прогресса по категориям</Typography>
+          </Box>
         </Box>
       </Paper>
     </Box>

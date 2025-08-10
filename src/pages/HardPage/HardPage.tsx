@@ -3,7 +3,6 @@ import { Box } from '@mui/material';
 import QuestionList from '@components/QuestionList/QuestionList';
 import QuestionService from '@services/QuestionService';
 import type { Question } from '../../types';
-import './HardPage.scss';
 
 const HardPage: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);

@@ -5,7 +5,6 @@ import QuestionList from '@components/QuestionList/QuestionList';
 import QuestionService from '@services/QuestionService';
 import CategoryService from '@services/CategoryService';
 import type { Question, ListType } from '@types';
-import './CategoryPage.scss';
 
 interface CategoryPageProps {
   filter?: ListType;

@@ -5,7 +5,6 @@ import type { Question, ListType, AnswerStatus } from '@types';
 import QuestionService from '@services/QuestionService';
 import LocalStorageService from '@services/LocalStorageService';
 import AnswerOption from './AnswerOption';
-import './QuestionCard.scss';
 
 interface QuestionCardProps {
   question: Question;
@@ -77,22 +76,20 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, index, total, onU
     setAnchorEl(null);
   };
 
-  const imageUrl = QuestionService.getQuestionImage(question);
+  const imageUrl = question.img;
   const answers = QuestionService.getAnswers(question);
   const helpOpen = Boolean(anchorEl);
 
   return (
-    <Card className="question-card">
-      <CardContent className="question-card__content">
-        <Box className="question-card__header">
+    <Card>
+      <CardContent>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
           <Chip 
-            label={`№${index} из ${total}`} 
-            size="small" 
-            className="question-card__number"
+            label={question.id} 
+            size="small"
           />
           <IconButton 
             onClick={handleHelpClick}
-            className="question-card__help"
             size="small"
           >
             <HelpCircle size={20} />
@@ -100,20 +97,24 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, index, total, onU
         </Box>
 
         {imageUrl && (
-          <Box className="question-card__image-container">
+          <Box mb={2} textAlign="center">
             <img 
               src={imageUrl} 
               alt="Вопрос" 
-              className="question-card__image"
+              style={{ maxWidth: '100%', height: 'auto' }}
             />
           </Box>
         )}
 
-        <Typography variant="h6" className="question-card__question">
+        <Typography variant="h6" mb={3}>
           {question.question}
         </Typography>
 
-        <Box className="question-card__answers">
+        <Box mb={3} sx={{ 
+          display: 'grid', 
+          gridTemplateColumns: '1fr 1fr',
+          gap: 2
+        }}>
           {[1, 2, 3, 4].map(num => {
             const answer = answers.find(a => a.id === String(num));
             return (
@@ -130,30 +131,34 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, index, total, onU
           })}
         </Box>
 
-        <Box className="question-card__actions">
+        <Box display="flex" gap={1} flexWrap="wrap">
           <Button
+
             size="small"
+            variant="outlined"
             startIcon={<Star size={16} />}
             onClick={() => toggleList('favorite')}
-            className={`question-card__action ${isFavorite ? 'active favorite' : ''}`}
+            color={isFavorite ? 'warning' : 'primary'}
           >
             {isFavorite ? 'Удалить из избранного' : 'Добавить в избранное'}
           </Button>
 
           <Button
             size="small"
+            variant="outlined"
             startIcon={<CheckCircle size={16} />}
             onClick={() => toggleList('known')}
-            className={`question-card__action ${isKnown ? 'active known' : ''}`}
+            color={isKnown ? 'success' : 'primary'}
           >
             {isKnown ? 'Удалить из "Точно знаю"' : 'Точно знаю ответ'}
           </Button>
 
           <Button
             size="small"
+            variant="outlined"
             startIcon={<Flame size={16} />}
             onClick={() => toggleList('hard')}
-            className={`question-card__action ${isHard ? 'active hard' : ''}`}
+            color={isHard ? 'error' : 'primary'}
           >
             {isHard ? 'Удалить из сложных' : 'Плохо запоминается'}
           </Button>
@@ -173,7 +178,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, index, total, onU
           horizontal: 'right',
         }}
       >
-        <Box className="question-card__popover">
+        <Box p={2} maxWidth={300}>
           <Typography variant="subtitle2" gutterBottom>
             Объяснение:
           </Typography>

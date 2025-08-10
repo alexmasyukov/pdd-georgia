@@ -4,8 +4,6 @@ import { Box, Typography } from '@mui/material';
 import CategoryItem from './CategoryItem';
 import CategoryService from '@services/CategoryService';
 import type { Category, CategoryStats } from '@types';
-import './CategoryList.scss';
-
 const CategoryList: React.FC = () => {
   const { id } = useParams();
   const [categories, setCategories] = useState<Category[]>([]);
@@ -41,12 +39,8 @@ const CategoryList: React.FC = () => {
   }, []);
 
   return (
-    <Box className="category-list">
-      <Typography variant="h5" className="category-list__title">
-        Категории
-      </Typography>
-      
-      <Box className="category-list__items">
+    <Box p={2}>
+      <Box display="flex" flexDirection="column" gap={2}>
         {categories.map(category => {
           const stats = categoryStats.get(category.id) || {
             total: 0,
