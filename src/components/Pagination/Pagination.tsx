@@ -1,7 +1,7 @@
 import React from 'react';
-import { Box, Button, Select, MenuItem, FormControl, Typography } from '@mui/material';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { PER_PAGE_OPTIONS } from '@utils/constants';
+import styles from './Pagination.module.scss';
 
 interface PaginationProps {
   currentPage: number;
@@ -32,7 +32,7 @@ const Pagination: React.FC<PaginationProps> = ({
     }
   };
 
-  const handlePerPageChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handlePerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onPerPageChange(Number(event.target.value));
     onPageChange(1); // Reset to first page when changing items per page
   };
@@ -42,51 +42,49 @@ const Pagination: React.FC<PaginationProps> = ({
   }
 
   return (
-    <Box sx={{ mt: 4 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-        <Typography variant="body2">
-          Вопросов на странице:
-        </Typography>
-        <FormControl size="small">
-          <Select
-            value={perPage}
-            onChange={handlePerPageChange}
-          >
-            {PER_PAGE_OPTIONS.map(option => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
+    <div className={styles.pagination}>
+      <div className={styles.perPageSelector}>
+        <label>Вопросов на странице:</label>
+        <select
+          value={perPage}
+          onChange={handlePerPageChange}
+        >
+          {PER_PAGE_OPTIONS.map(option => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </div>
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, mb: 2 }}>
-        <Button
+      <div className={styles.controls}>
+        <button
           onClick={handlePrevPage}
           disabled={currentPage === 1}
-          startIcon={<ChevronLeft size={18} />}
+          className={styles.button}
         >
+          <ChevronLeft size={18} />
           Назад
-        </Button>
+        </button>
 
-        <Typography>
+        <span className={styles.pageInfo}>
           Страница {currentPage} из {totalPages}
-        </Typography>
+        </span>
 
-        <Button
+        <button
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
-          endIcon={<ChevronRight size={18} />}
+          className={styles.button}
         >
           Вперед
-        </Button>
-      </Box>
+          <ChevronRight size={18} />
+        </button>
+      </div>
 
-      <Typography variant="body2" color="text.secondary" textAlign="center">
+      <div className={styles.totalInfo}>
         Всего вопросов: {totalItems}
-      </Typography>
-    </Box>
+      </div>
+    </div>
   );
 };
 

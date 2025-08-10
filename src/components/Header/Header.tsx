@@ -1,7 +1,7 @@
 import React from 'react';
-import {Link, useLocation} from 'react-router-dom';
-import {AppBar, Box, Button, Toolbar, Typography} from '@mui/material';
-import {CheckCircle, Flame, Home, Star} from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { CheckCircle, Flame, Home, Star } from 'lucide-react';
+import styles from './Header.module.scss';
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -9,67 +9,45 @@ const Header: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <AppBar position="static" elevation={0}>
-      <Toolbar>
-        <Typography variant="h6" sx={{flexGrow: 0, mr: 4}}>
-          ПДД Грузии - Тестирование
-        </Typography>
+    <div className={styles.header}>
+      <h1 className={styles.title}>
+        ПДД Грузии - Тестирование
+      </h1>
 
-        <Box sx={{display: 'flex', gap: 1}}>
-          <Button
-            component={Link}
-            to="/"
-            startIcon={<Home size={18}/>}
-            color="inherit"
-            sx={{
-              backgroundColor: isActive('/') ? 'primary.dark' : 'transparent',
-              '&:hover': {backgroundColor: 'primary.dark'}
-            }}
-          >
-            Главная
-          </Button>
+      <nav className={styles.nav}>
+        <Link
+          to="/"
+          className={`${styles.navLink} ${isActive('/') ? styles.active : ''}`}
+        >
+          <Home size={18} />
+          Главная
+        </Link>
 
-          <Button
-            component={Link}
-            to="/favorites"
-            startIcon={<Star size={18}/>}
-            color="inherit"
-            sx={{
-              backgroundColor: isActive('/favorites') ? 'primary.dark' : 'transparent',
-              '&:hover': {backgroundColor: 'primary.dark'}
-            }}
-          >
-            Избранное
-          </Button>
+        <Link
+          to="/favorites"
+          className={`${styles.navLink} ${isActive('/favorites') ? styles.active : ''}`}
+        >
+          <Star size={18} />
+          Избранное
+        </Link>
 
-          <Button
-            component={Link}
-            to="/known"
-            startIcon={<CheckCircle size={18}/>}
-            color="inherit"
-            sx={{
-              backgroundColor: isActive('/known') ? 'primary.dark' : 'transparent',
-              '&:hover': {backgroundColor: 'primary.dark'}
-            }}
-          >
-            Точно знаю
-          </Button>
+        <Link
+          to="/known"
+          className={`${styles.navLink} ${isActive('/known') ? styles.active : ''}`}
+        >
+          <CheckCircle size={18} />
+          Точно знаю
+        </Link>
 
-          <Button
-            component={Link}
-            to="/hard"
-            startIcon={<Flame size={18}/>}
-            color="inherit"
-            sx={{
-              backgroundColor: isActive('/hard') ? 'primary.dark' : 'transparent',
-              '&:hover': {backgroundColor: 'primary.dark'}
-            }}
-          >
-            Сложные
-          </Button>
-        </Box>
-      </Toolbar>
-    </AppBar>
+        <Link
+          to="/hard"
+          className={`${styles.navLink} ${isActive('/hard') ? styles.active : ''}`}
+        >
+          <Flame size={18} />
+          Сложные
+        </Link>
+      </nav>
+    </div>
   );
 };
 

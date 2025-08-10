@@ -1,0 +1,136 @@
+@import '@/styles/mixins';
+
+.questionCard {
+  @include card;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.header {
+  @include flex-between;
+  margin-bottom: 16px;
+}
+
+.questionNumber {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--bg-dark);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.helpButton {
+  padding: 4px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.2s;
+  
+  &:hover {
+    color: var(--color-info);
+  }
+}
+
+.imageContainer {
+  margin-bottom: 20px;
+  text-align: center;
+  background: var(--bg-dark);
+  border-radius: 8px;
+  padding: 12px;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  img {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+    border-radius: 4px;
+  }
+  
+  .noImage {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+}
+
+.questionText {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+.answersGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.actionButton {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-decoration: underline;
+  padding: 4px 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  
+  &:hover {
+    color: var(--text-primary);
+  }
+  
+  &.favorite {
+    &.active {
+      color: var(--color-warning);
+    }
+  }
+  
+  &.known {
+    &.active {
+      color: var(--color-success);
+    }
+  }
+  
+  &.hard {
+    &.active {
+      color: var(--color-error);
+    }
+  }
+}
+
+.popover {
+  position: fixed;
+  background: var(--bg-header);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  max-width: 300px;
+  box-shadow: var(--shadow);
+  z-index: 1000;
+  
+  .popoverTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  
+  .popoverContent {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+}

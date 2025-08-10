@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Checkbox, FormControlLabel } from '@mui/material';
 import QuestionCard from '@components/QuestionCard/QuestionCard';
 import Pagination from '@components/Pagination/Pagination';
 import LocalStorageService from '@services/LocalStorageService';
 import PaginationService from '@services/PaginationService';
 import type { Question } from '@types';
 import { scrollToTop } from '@utils/helpers';
+import styles from './QuestionList.module.scss';
 
 interface QuestionListProps {
   questions: Question[];
@@ -60,42 +60,39 @@ const QuestionList: React.FC<QuestionListProps> = ({
 
   if (questions.length === 0) {
     return (
-      <Box sx={{ textAlign: 'center', py: 4 }}>
-        <Typography variant="h6" gutterBottom>
-          Нет вопросов для отображения
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Выберите категорию или добавьте вопросы в списки
-        </Typography>
-      </Box>
+      <div className={styles.emptyState}>
+        <h3>Нет вопросов для отображения</h3>
+        <p>Выберите категорию или добавьте вопросы в списки</p>
+      </div>
     );
   }
 
   return (
-    <Box>
+    <div className={styles.container}>
       {(title || showCategoryToggle) && (
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <div className={styles.header}>
           {title && (
-            <Typography variant="h5">
+            <h2 className={styles.title}>
               {title}
-            </Typography>
+            </h2>
           )}
           {showCategoryToggle && categoryId && (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={isCategoryCompleted}
-                  onChange={handleCategoryToggle}
-                  color="success"
-                />
-              }
-              label="Категория изучена"
-            />
+            <div className={styles.categoryToggle}>
+              <input
+                type="checkbox"
+                id="category-completed"
+                checked={isCategoryCompleted}
+                onChange={handleCategoryToggle}
+              />
+              <label htmlFor="category-completed">
+                Категория изучена
+              </label>
+            </div>
           )}
-        </Box>
+        </div>
       )}
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <div className={styles.questionsList}>
         {paginatedData.items.map((question, index) => (
           <QuestionCard
             key={question.id}
@@ -105,7 +102,7 @@ const QuestionList: React.FC<QuestionListProps> = ({
             onUpdate={onUpdate}
           />
         ))}
-      </Box>
+      </div>
 
       <Pagination
         currentPage={paginatedData.currentPage}
@@ -115,7 +112,7 @@ const QuestionList: React.FC<QuestionListProps> = ({
         onPageChange={handlePageChange}
         onPerPageChange={handlePerPageChange}
       />
-    </Box>
+    </div>
   );
 };
 

@@ -1,0 +1,62 @@
+@import '@/styles/mixins';
+
+.container {
+  padding: 0;
+}
+
+.header {
+  @include flex-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.categoryToggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+  
+  label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+}
+
+.questionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 48px 24px;
+  
+  h3 {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0 0 12px 0;
+  }
+  
+  p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
 import QuestionList from '@components/QuestionList/QuestionList';
 import QuestionService from '@services/QuestionService';
 import type { Question } from '@types';
@@ -18,13 +17,13 @@ const KnownPage: React.FC = () => {
   };
 
   return (
-    <Box className="known-page">
+    <div className="known-page">
       <QuestionList
         questions={questions}
         title="Вопросы, которые точно знаю"
         onUpdate={handleUpdate}
       />
-    </Box>
+    </div>
   );
 };
 

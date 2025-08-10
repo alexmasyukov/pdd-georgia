@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { Box, AppBar, Drawer, Toolbar } from '@mui/material';
+import styles from './Layout.module.scss';
 
 interface LayoutProps {
   sidebar?: React.ReactNode;
@@ -8,46 +8,24 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ sidebar, header }) => {
-  const sidebarWidth = 320;
-
   return (
-    <Box sx={{ display: 'flex', height: '100vh' }}>
+    <div className={styles.layout}>
       {header && (
-        <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-          <Toolbar>
+        <header className={styles.header}>
+          <div className={styles.headerContent}>
             {header}
-          </Toolbar>
-        </AppBar>
+          </div>
+        </header>
       )}
       {sidebar && (
-        <Drawer
-          variant="permanent"
-          sx={{
-            width: sidebarWidth,
-            flexShrink: 0,
-            '& .MuiDrawer-paper': {
-              width: sidebarWidth,
-              boxSizing: 'border-box',
-            },
-          }}
-        >
-          <Toolbar />
-          <Box sx={{ overflow: 'auto' }}>
-            {sidebar}
-          </Box>
-        </Drawer>
+        <aside className={`${styles.sidebar} ${!header ? styles.noHeader : ''}`}>
+          {sidebar}
+        </aside>
       )}
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          ...(header && { mt: 8 }),
-        }}
-      >
+      <main className={`${styles.main} ${!sidebar ? styles.noSidebar : ''} ${!header ? styles.noHeader : ''}`}>
         <Outlet />
-      </Box>
-    </Box>
+      </main>
+    </div>
   );
 };
 

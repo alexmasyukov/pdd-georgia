@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, Typography, Box, Button, IconButton, Popover, Chip } from '@mui/material';
+import React, { useState, useEffect, useRef } from 'react';
 import { Star, CheckCircle, Flame, HelpCircle } from 'lucide-react';
 import type { Question, ListType, AnswerStatus } from '@types';
 import QuestionService from '@services/QuestionService';
 import LocalStorageService from '@services/LocalStorageService';
 import AnswerOption from './AnswerOption';
+import styles from './QuestionCard.module.scss';
 
 interface QuestionCardProps {
   question: Question;
@@ -19,7 +19,9 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, index, total, onU
   const [isFavorite, setIsFavorite] = useState(false);
   const [isKnown, setIsKnown] = useState(false);
   const [isHard, setIsHard] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [showHelp, setShowHelp] = useState(false);
+  const helpButtonRef = useRef<HTMLButtonElement>(null);
+  const [helpPosition, setHelpPosition] = useState({ top: 0, left: 0 });
 
   useEffect(() => {
     // Проверяем статус вопроса в списках
@@ -68,126 +70,115 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, index, total, onU
     onUpdate?.();
   };
 
-  const handleHelpClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleHelpClick = () => {
+    if (helpButtonRef.current) {
+      const rect = helpButtonRef.current.getBoundingClientRect();
+      setHelpPosition({
+        top: rect.bottom + 8,
+        left: rect.right - 300
+      });
+    }
+    setShowHelp(!showHelp);
   };
 
-  const handleHelpClose = () => {
-    setAnchorEl(null);
-  };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showHelp && helpButtonRef.current && !helpButtonRef.current.contains(event.target as Node)) {
+        setShowHelp(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showHelp]);
 
   const imageUrl = question.img;
   const answers = QuestionService.getAnswers(question);
-  const helpOpen = Boolean(anchorEl);
 
   return (
-    <Card>
-      <CardContent>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Chip 
-            label={question.id} 
-            size="small"
+    <div className={styles.questionCard}>
+      <div className={styles.header}>
+        <span className={styles.questionNumber}>
+          {question.id}
+        </span>
+        <button
+          ref={helpButtonRef}
+          onClick={handleHelpClick}
+          className={styles.helpButton}
+        >
+          <HelpCircle size={20} />
+        </button>
+      </div>
+
+      <div className={styles.imageContainer}>
+        {imageUrl ? (
+          <img 
+            src={imageUrl} 
+            alt="Вопрос" 
           />
-          <IconButton 
-            onClick={handleHelpClick}
-            size="small"
-          >
-            <HelpCircle size={20} />
-          </IconButton>
-        </Box>
-
-        {imageUrl && (
-          <Box mb={2} textAlign="center">
-            <img 
-              src={imageUrl} 
-              alt="Вопрос" 
-              style={{ maxWidth: '100%', height: 'auto' }}
-            />
-          </Box>
+        ) : (
+          <div className={styles.noImage}>Изображение отсутствует</div>
         )}
+      </div>
 
-        <Typography variant="h6" mb={3}>
-          {question.question}
-        </Typography>
+      <h3 className={styles.questionText}>
+        {question.question}
+      </h3>
 
-        <Box mb={3} sx={{ 
-          display: 'grid', 
-          gridTemplateColumns: '1fr 1fr',
-          gap: 2
-        }}>
-          {[1, 2, 3, 4].map(num => {
-            const answer = answers.find(a => a.id === String(num));
-            return (
-              <AnswerOption
-                key={num}
-                number={num}
-                text={answer?.text || ''}
-                status={answerStatus[String(num)] || 'neutral'}
-                isSelected={selectedAnswer === String(num)}
-                isDisabled={!answer || selectedAnswer !== null}
-                onClick={() => answer && handleAnswerClick(String(num))}
-              />
-            );
-          })}
-        </Box>
+      <div className={styles.answersGrid}>
+        {[1, 2, 3, 4].map(num => {
+          const answer = answers.find(a => a.id === String(num));
+          return (
+            <AnswerOption
+              key={num}
+              number={num}
+              text={answer?.text || ''}
+              status={answerStatus[String(num)] || 'neutral'}
+              isSelected={selectedAnswer === String(num)}
+              isDisabled={!answer || selectedAnswer !== null}
+              onClick={() => answer && handleAnswerClick(String(num))}
+            />
+          );
+        })}
+      </div>
 
-        <Box display="flex" gap={1} flexWrap="wrap">
-          <Button
+      <div className={styles.actions}>
+        <button
+          onClick={() => toggleList('favorite')}
+          className={`${styles.actionButton} ${styles.favorite} ${isFavorite ? styles.active : ''}`}
+        >
+          {isFavorite ? 'Удалить из избранного' : 'Добавить в избранное'}
+        </button>
 
-            size="small"
-            variant="outlined"
-            startIcon={<Star size={16} />}
-            onClick={() => toggleList('favorite')}
-            color={isFavorite ? 'warning' : 'primary'}
-          >
-            {isFavorite ? 'Удалить из избранного' : 'Добавить в избранное'}
-          </Button>
+        <button
+          onClick={() => toggleList('known')}
+          className={`${styles.actionButton} ${styles.known} ${isKnown ? styles.active : ''}`}
+        >
+          {isKnown ? 'Удалить из "Точно знаю"' : 'Точно знаю ответ'}
+        </button>
 
-          <Button
-            size="small"
-            variant="outlined"
-            startIcon={<CheckCircle size={16} />}
-            onClick={() => toggleList('known')}
-            color={isKnown ? 'success' : 'primary'}
-          >
-            {isKnown ? 'Удалить из "Точно знаю"' : 'Точно знаю ответ'}
-          </Button>
+        <button
+          onClick={() => toggleList('hard')}
+          className={`${styles.actionButton} ${styles.hard} ${isHard ? styles.active : ''}`}
+        >
+          {isHard ? 'Удалить из сложных' : 'Плохо запоминается'}
+        </button>
+      </div>
 
-          <Button
-            size="small"
-            variant="outlined"
-            startIcon={<Flame size={16} />}
-            onClick={() => toggleList('hard')}
-            color={isHard ? 'error' : 'primary'}
-          >
-            {isHard ? 'Удалить из сложных' : 'Плохо запоминается'}
-          </Button>
-        </Box>
-      </CardContent>
-
-      <Popover
-        open={helpOpen}
-        anchorEl={anchorEl}
-        onClose={handleHelpClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <Box p={2} maxWidth={300}>
-          <Typography variant="subtitle2" gutterBottom>
+      {showHelp && (
+        <div 
+          className={styles.popover}
+          style={{ top: helpPosition.top, left: helpPosition.left }}
+        >
+          <div className={styles.popoverTitle}>
             Объяснение:
-          </Typography>
-          <Typography variant="body2">
+          </div>
+          <div className={styles.popoverContent}>
             {question.question_explained}
-          </Typography>
-        </Box>
-      </Popover>
-    </Card>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
 import QuestionList from '@components/QuestionList/QuestionList';
 import QuestionService from '@services/QuestionService';
 import type { Question } from '@types';
@@ -18,13 +17,13 @@ const FavoritesPage: React.FC = () => {
   };
 
   return (
-    <Box className="favorites-page">
+    <div className="favorites-page">
       <QuestionList
         questions={questions}
         title="Избранные вопросы"
         onUpdate={handleUpdate}
       />
-    </Box>
+    </div>
   );
 };
 

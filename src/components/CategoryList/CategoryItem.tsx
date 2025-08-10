@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Card, CardContent, Typography, Box, Chip } from '@mui/material';
 import { Star, CheckCircle, Flame } from 'lucide-react';
 import type { Category, CategoryStats } from '@types';
+import styles from './CategoryItem.module.scss';
 
 interface CategoryItemProps {
   category: Category;
@@ -18,64 +18,49 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ category, stats, isActive }
   };
 
   return (
-    <Box>
-      <Card 
+    <div className={styles.categoryItem}>
+      <div 
         onClick={handleCategoryClick}
-        sx={{ 
-          cursor: 'pointer',
-          border: isActive ? 2 : 0,
-          borderColor: 'primary.main',
-          bgcolor: stats.isCompleted ? 'success.dark' : 'grey.800',
-          '&:hover': {
-            transform: 'translateY(-2px)',
-            boxShadow: 3
-          },
-          transition: 'all 0.3s ease'
-        }}
+        className={`${styles.card} ${isActive ? styles.active : ''} ${stats.isCompleted ? styles.completed : ''}`}
       >
-        <CardContent sx={{ pb: 1 }}>
-          <Typography variant="subtitle1">
-            {category.name}
-          </Typography>
-        </CardContent>
-      </Card>
+        <h3 className={styles.title}>
+          {category.name}
+        </h3>
+      </div>
       
-      <Box display="flex" justifyContent="flex-end" gap={2} mt={1} mr={1} flexWrap="wrap">
+      <div className={styles.links}>
         {stats.favorites > 0 && (
-          <Typography
-            component={Link}
+          <Link
             to={`/category/${category.id}/favorites`}
-            variant="body2"
-            color="text.secondary"
-            sx={{ textDecoration: 'none', '&:hover': { color: 'warning.main' } }}
+            className={`${styles.link} ${styles.favorites}`}
+            onClick={(e) => e.stopPropagation()}
           >
+            <Star size={14} />
             избранное ({stats.favorites})
-          </Typography>
+          </Link>
         )}
         {stats.known > 0 && (
-          <Typography
-            component={Link}
+          <Link
             to={`/category/${category.id}/known`}
-            variant="body2"
-            color="text.secondary"
-            sx={{ textDecoration: 'none', '&:hover': { color: 'success.main' } }}
+            className={`${styles.link} ${styles.known}`}
+            onClick={(e) => e.stopPropagation()}
           >
+            <CheckCircle size={14} />
             знаю ({stats.known})
-          </Typography>
+          </Link>
         )}
         {stats.hard > 0 && (
-          <Typography
-            component={Link}
+          <Link
             to={`/category/${category.id}/hard`}
-            variant="body2"
-            color="text.secondary"
-            sx={{ textDecoration: 'none', '&:hover': { color: 'error.main' } }}
+            className={`${styles.link} ${styles.hard}`}
+            onClick={(e) => e.stopPropagation()}
           >
+            <Flame size={14} />
             сложные ({stats.hard})
-          </Typography>
+          </Link>
         )}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

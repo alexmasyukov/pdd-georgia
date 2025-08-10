@@ -1,0 +1,155 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-dark: #1a1a1a;
+  --bg-sidebar: #222;
+  --bg-card: #2a2a2a;
+  --bg-header: #333;
+  --text-primary: #fff;
+  --text-secondary: #999;
+  --text-muted: #666;
+  --color-success: #4caf50;
+  --color-error: #f44336;
+  --color-warning: #ff9800;
+  --color-info: #2196f3;
+  --border-color: #444;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  padding: 0;
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+a {
+  color: var(--color-info);
+  text-decoration: none;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  
+  &.btn-primary {
+    background: var(--color-info);
+    color: white;
+    
+    &:hover {
+      background: #1976d2;
+    }
+  }
+  
+  &.btn-success {
+    background: var(--color-success);
+    color: white;
+    
+    &:hover {
+      background: #388e3c;
+    }
+  }
+  
+  &.btn-error {
+    background: var(--color-error);
+    color: white;
+    
+    &:hover {
+      background: #d32f2f;
+    }
+  }
+  
+  &.btn-warning {
+    background: var(--color-warning);
+    color: white;
+    
+    &:hover {
+      background: #f57c00;
+    }
+  }
+  
+  &.btn-text {
+    background: transparent;
+    color: var(--text-secondary);
+    text-decoration: underline;
+    padding: 4px 8px;
+    font-size: 13px;
+    
+    &:hover {
+      color: var(--text-primary);
+    }
+    
+    &.active {
+      color: var(--color-warning);
+    }
+    
+    &.error {
+      color: var(--color-error);
+    }
+  }
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+  }
+  
+  label {
+    cursor: pointer;
+    font-size: 14px;
+  }
+}

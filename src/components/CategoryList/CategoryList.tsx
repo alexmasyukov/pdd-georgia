@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography } from '@mui/material';
 import CategoryItem from './CategoryItem';
 import CategoryService from '@services/CategoryService';
 import type { Category, CategoryStats } from '@types';
+import styles from './CategoryList.module.scss';
+
 const CategoryList: React.FC = () => {
   const { id } = useParams();
   const [categories, setCategories] = useState<Category[]>([]);
@@ -39,28 +40,26 @@ const CategoryList: React.FC = () => {
   }, []);
 
   return (
-    <Box p={2}>
-      <Box display="flex" flexDirection="column" gap={2}>
-        {categories.map(category => {
-          const stats = categoryStats.get(category.id) || {
-            total: 0,
-            favorites: 0,
-            known: 0,
-            hard: 0,
-            isCompleted: false
-          };
-          
-          return (
-            <CategoryItem
-              key={category.id}
-              category={category}
-              stats={stats}
-              isActive={category.id === activeCategoryId}
-            />
-          );
-        })}
-      </Box>
-    </Box>
+    <div className={styles.categoryList}>
+      {categories.map(category => {
+        const stats = categoryStats.get(category.id) || {
+          total: 0,
+          favorites: 0,
+          known: 0,
+          hard: 0,
+          isCompleted: false
+        };
+        
+        return (
+          <CategoryItem
+            key={category.id}
+            category={category}
+            stats={stats}
+            isActive={category.id === activeCategoryId}
+          />
+        );
+      })}
+    </div>
   );
 };
 

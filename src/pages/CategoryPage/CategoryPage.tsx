@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
 import QuestionList from '@components/QuestionList/QuestionList';
 import QuestionService from '@services/QuestionService';
 import CategoryService from '@services/CategoryService';
@@ -58,7 +57,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ filter }) => {
   };
 
   return (
-    <Box className="category-page">
+    <div className="category-page">
       <QuestionList
         questions={questions}
         title={title}
@@ -66,7 +65,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ filter }) => {
         categoryId={id ? parseInt(id, 10) : undefined}
         onUpdate={handleUpdate}
       />
-    </Box>
+    </div>
   );
 };
 

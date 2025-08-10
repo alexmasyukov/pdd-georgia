@@ -14,7 +14,10 @@
       "mcp__playwright__browser_network_requests",
       "mcp__playwright__browser_snapshot",
       "Bash(rm:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "mcp__figma-dev-mode-mcp-server__get_image",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_click"
     ],
     "deny": []
   }
