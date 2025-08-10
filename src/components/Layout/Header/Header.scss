@@ -1,0 +1,28 @@
+@import '@styles/variables';
+@import '@styles/mixins';
+
+.header {
+  padding: $spacing-xs $spacing-md;
+  border-bottom: 1px solid $border-color;
+
+  &__nav {
+    display: flex;
+    gap: $spacing-lg;
+  }
+
+  &__link {
+    color: $text-secondary;
+    text-decoration: none;
+    font-size: $font-size-base;
+    transition: $transition-fast;
+
+    &:hover {
+      color: $text-primary;
+    }
+
+    &--active {
+      font-weight: bold;
+      color: $text-primary;
+    }
+  }
+}

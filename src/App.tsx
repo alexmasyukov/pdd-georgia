@@ -1,12 +1,9 @@
-import { BrowserRouter } from 'react-router-dom';
-import AppRouter from '@/router';
+import { RouterProvider } from 'react-router-dom';
+import { router } from '@/router';
+import '@styles/global.scss';
 
 function App() {
-  return (
-    <BrowserRouter>
-      <AppRouter />
-    </BrowserRouter>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

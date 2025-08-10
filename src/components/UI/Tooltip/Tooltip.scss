@@ -1,0 +1,78 @@
+@import '@styles/variables';
+@import '@styles/mixins';
+
+.tooltip-trigger {
+  display: inline-block;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: $z-index-tooltip;
+  pointer-events: none;
+  animation: fadeIn 0.2s ease;
+
+  &__content {
+    background: rgba($text-primary, 0.95);
+    color: white;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-small;
+    max-width: 250px;
+    box-shadow: $shadow-md;
+    line-height: 1.4;
+  }
+
+  &--top::after,
+  &--bottom::after,
+  &--left::after,
+  &--right::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+
+  &--top::after {
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 4px 4px 0 4px;
+    border-color: rgba($text-primary, 0.95) transparent transparent transparent;
+  }
+
+  &--bottom::after {
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 4px 4px 4px;
+    border-color: transparent transparent rgba($text-primary, 0.95) transparent;
+  }
+
+  &--left::after {
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 4px 0 4px 4px;
+    border-color: transparent transparent transparent rgba($text-primary, 0.95);
+  }
+
+  &--right::after {
+    left: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 4px 4px 4px 0;
+    border-color: transparent rgba($text-primary, 0.95) transparent transparent;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

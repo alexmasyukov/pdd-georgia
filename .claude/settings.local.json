@@ -17,7 +17,9 @@
       "Bash(find:*)",
       "mcp__figma-dev-mode-mcp-server__get_image",
       "mcp__playwright__browser_take_screenshot",
-      "mcp__playwright__browser_click"
+      "mcp__playwright__browser_click",
+      "Bash(curl:*)",
+      "mcp__figma-dev-mode-mcp-server__get_code"
     ],
     "deny": []
   }

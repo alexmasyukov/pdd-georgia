@@ -1,63 +1,145 @@
-import type {Category, CategoryStats} from '@types';
-import categoriesData from '@data/categories.json';
-import LocalStorageService from './LocalStorageService';
-import QuestionService from './QuestionService';
+import type { Categories, Category, CategoryStats } from '@/types';
+import { API_ENDPOINTS } from '@utils/constants';
+import LocalStorageService from '@services/LocalStorageService';
+import QuestionService from '@services/QuestionService';
 
 class CategoryService {
-  private categories: Category[] = [];
+  private categories: Categories = {};
+  private loading = false;
+  private error: string | null = null;
 
-  constructor() {
-    // Преобразуем объект категорий в массив
-    this.categories = Object.entries(categoriesData).map(([id, name]) => ({
-      id: parseInt(id, 10),
-      name
-    }));
+  async loadCategories(): Promise<Categories> {
+    if (Object.keys(this.categories).length > 0) {
+      return this.categories;
+    }
+
+    if (this.loading) {
+      // Wait for the current loading to complete
+      return new Promise((resolve) => {
+        const checkInterval = setInterval(() => {
+          if (!this.loading) {
+            clearInterval(checkInterval);
+            resolve(this.categories);
+          }
+        }, 100);
+      });
+    }
+
+    this.loading = true;
+    this.error = null;
+
+    try {
+      const response = await fetch(API_ENDPOINTS.CATEGORIES);
+      if (!response.ok) {
+        throw new Error(`Failed to load categories: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      this.categories = data;
+      return this.categories;
+    } catch (error) {
+      this.error = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Error loading categories:', error);
+      return {};
+    } finally {
+      this.loading = false;
+    }
   }
 
-  getAllCategories(): Category[] {
+  async getCategories(): Promise<Categories> {
+    if (Object.keys(this.categories).length === 0) {
+      await this.loadCategories();
+    }
     return this.categories;
   }
 
-  getCategoryById(id: number): Category | undefined {
-    return this.categories.find(c => c.id === id);
+  async getCategoriesArray(): Promise<Category[]> {
+    const categories = await this.getCategories();
+    return Object.entries(categories).map(([id, name]) => ({
+      id,
+      name,
+    }));
   }
 
-  getCategoryName(id: number): string {
-    const category = this.getCategoryById(id);
-    return category?.name || 'Неизвестная категория';
+  async getCategoryById(id: string): Promise<Category | null> {
+    const categories = await this.getCategories();
+    const name = categories[id];
+    
+    if (!name) {
+      return null;
+    }
+    
+    return { id, name };
   }
 
-  // Статистика по категории
-  getCategoryStats(categoryId: number): CategoryStats {
-    const total = QuestionService.getQuestionCountByCategory(categoryId);
-    const favorites = QuestionService.getFavoriteCountByCategory(categoryId);
-    const known = QuestionService.getKnownCountByCategory(categoryId);
-    const hard = QuestionService.getHardCountByCategory(categoryId);
+  async getCategoryStats(categoryId: string): Promise<CategoryStats> {
+    const counts = LocalStorageService.getCategoryListCounts(categoryId);
     const isCompleted = LocalStorageService.isCategoryCompleted(categoryId);
-
+    
     return {
-      total,
-      favorites,
-      known,
-      hard,
-      isCompleted
+      ...counts,
+      isCompleted,
     };
   }
 
-  // Получение всех статистик для отображения в списке категорий
-  getAllCategoryStats(): Map<number, CategoryStats> {
-    const statsMap = new Map<number, CategoryStats>();
-
-    this.categories.forEach(category => {
-      statsMap.set(category.id, this.getCategoryStats(category.id));
-    });
-
-    return statsMap;
+  async getAllCategoriesStats(): Promise<Record<string, CategoryStats>> {
+    const categories = await this.getCategories();
+    const stats: Record<string, CategoryStats> = {};
+    
+    for (const categoryId of Object.keys(categories)) {
+      stats[categoryId] = await this.getCategoryStats(categoryId);
+    }
+    
+    return stats;
   }
 
-  // Проверка, есть ли вопросы в категории
-  hasQuestions(categoryId: number): boolean {
-    return QuestionService.getQuestionCountByCategory(categoryId) > 0;
+  toggleCategoryComplete(categoryId: string): boolean {
+    return LocalStorageService.toggleCategoryComplete(categoryId);
+  }
+
+  async getCategoryProgress(categoryId: string): Promise<{
+    total: number;
+    answered: number;
+    correct: number;
+    percentage: number;
+  }> {
+    const questions = await QuestionService.getQuestionsByCategory(categoryId);
+    const total = questions.length;
+    
+    // For now, we'll just return mock data
+    // In a real app, we'd track answered questions and correct answers
+    const answered = 0;
+    const correct = 0;
+    const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
+    
+    return {
+      total,
+      answered,
+      correct,
+      percentage,
+    };
+  }
+
+  async searchCategories(query: string): Promise<Category[]> {
+    const categories = await this.getCategoriesArray();
+    const lowerQuery = query.toLowerCase();
+    
+    return categories.filter(category =>
+      category.name.toLowerCase().includes(lowerQuery)
+    );
+  }
+
+  getError(): string | null {
+    return this.error;
+  }
+
+  isLoading(): boolean {
+    return this.loading;
+  }
+
+  clearCache(): void {
+    this.categories = {};
+    this.error = null;
   }
 }
 

@@ -1,56 +1,53 @@
 export interface Question {
   id: number;
   question: string;
-  answer_1: string;
+  answer_1?: string;
   answer_2?: string;
   answer_3?: string;
   answer_4?: string;
   correct_answer: string;
-  question_explained: string;
   hasImg: 0 | 1;
   img?: string;
+  question_explained: string;
+  audio?: string | null;
   category: number;
-  audio: null;
 }
 
 export interface Category {
-  id: number;
+  id: string;
   name: string;
 }
+
+export type Categories = Record<string, string>;
 
 export interface Settings {
   perPage: number;
 }
 
-export type ListType = 'favorite' | 'known' | 'hard';
+export type QuestionList = 'favorite' | 'known' | 'hard';
 
 export interface CategoryStats {
-  total: number;
-  favorites: number;
-  known: number;
-  hard: number;
+  favoriteCount: number;
+  knownCount: number;
+  hardCount: number;
   isCompleted: boolean;
 }
 
-export interface PaginationResult<T> {
-  items: T[];
-  totalPages: number;
+export interface PaginationState {
   currentPage: number;
+  totalPages: number;
+  itemsPerPage: number;
   totalItems: number;
-  hasNext: boolean;
-  hasPrev: boolean;
 }
 
-export interface QuestionWithMeta extends Question {
-  isFavorite?: boolean;
-  isKnown?: boolean;
-  isHard?: boolean;
-  selectedAnswer?: string;
-  isAnswered?: boolean;
+export interface AnswerState {
+  questionId: number;
+  selectedAnswer: string | null;
+  isCorrect: boolean | null;
 }
 
-export type AnswerStatus = 'correct' | 'incorrect' | 'neutral';
-
-export interface RouteFilter {
-  filter?: ListType;
+export interface LocalStorageData {
+  settings: Settings;
+  complete: string[];
+  [key: string]: any;
 }

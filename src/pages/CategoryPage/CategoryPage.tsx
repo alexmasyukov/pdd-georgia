@@ -1,69 +1,118 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import QuestionList from '@components/QuestionList/QuestionList';
+import QuestionList from '@components/Questions/QuestionList/QuestionList';
 import QuestionService from '@services/QuestionService';
 import CategoryService from '@services/CategoryService';
-import type { Question, ListType } from '@types';
+import LocalStorageService from '@services/LocalStorageService';
+import type {Question, Category, QuestionList as QuestionListType} from '@/types';
+import './CategoryPage.scss';
 
 interface CategoryPageProps {
-  filter?: ListType;
+  listType?: QuestionListType;
 }
 
-const CategoryPage: React.FC<CategoryPageProps> = ({ filter }) => {
-  const { id } = useParams();
+const CategoryPage: React.FC<CategoryPageProps> = ({ listType }) => {
+  const { id } = useParams<{ id: string }>();
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [title, setTitle] = useState<string>('');
-  const [updateTrigger, setUpdateTrigger] = useState(0);
+  const [category, setCategory] = useState<Category | null>(null);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id) return;
-
-    const categoryId = parseInt(id, 10);
-    const category = CategoryService.getCategoryById(categoryId);
-    
-    if (!category) return;
-
-    let categoryQuestions: Question[];
-    let pageTitle = category.name;
-
-    if (filter) {
-      switch (filter) {
-        case 'favorite':
-          categoryQuestions = QuestionService.getFavoriteQuestions(categoryId);
-          pageTitle = `${category.name} - Избранное`;
-          break;
-        case 'known':
-          categoryQuestions = QuestionService.getKnownQuestions(categoryId);
-          pageTitle = `${category.name} - Точно знаю`;
-          break;
-        case 'hard':
-          categoryQuestions = QuestionService.getHardQuestions(categoryId);
-          pageTitle = `${category.name} - Плохо запоминающиеся`;
-          break;
-        default:
-          categoryQuestions = QuestionService.getQuestionsByCategory(categoryId);
-      }
-    } else {
-      categoryQuestions = QuestionService.getQuestionsByCategory(categoryId);
+    if (id) {
+      loadData();
     }
+  }, [id, listType]);
 
-    setQuestions(categoryQuestions);
-    setTitle(pageTitle);
-  }, [id, filter, updateTrigger]);
+  const loadData = async () => {
+    if (!id) return;
+    
+    try {
+      setLoading(true);
+      setError(null);
 
-  const handleUpdate = () => {
-    // Триггерим обновление списка вопросов
-    setUpdateTrigger(prev => prev + 1);
+      const [categoryData, questionsData] = await Promise.all([
+        CategoryService.getCategoryById(id),
+        listType
+          ? QuestionService.getQuestionsByCategoryAndList(id, listType)
+          : QuestionService.getQuestionsByCategory(id),
+      ]);
+
+      setCategory(categoryData);
+      setQuestions(questionsData);
+      setIsCompleted(LocalStorageService.isCategoryCompleted(id));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load data');
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleToggleComplete = () => {
+    if (!id) return;
+    const newStatus = LocalStorageService.toggleCategoryComplete(id);
+    setIsCompleted(newStatus);
+  };
+
+  const getPageTitle = () => {
+    if (!category) return '';
+    
+    let title = category.name;
+    if (listType === 'favorite') title += ' - Избранное';
+    if (listType === 'known') title += ' - Точно знаю';
+    if (listType === 'hard') title += ' - Сложные';
+    
+    return title;
+  };
+
+  if (loading) {
+    return (
+      <div className="category-page category-page--loading">
+        <div className="category-page__loader">Загрузка...</div>
+      </div>
+    );
+  }
+
+  if (error || !category) {
+    return (
+      <div className="category-page category-page--error">
+        <div className="category-page__error">
+          {error || 'Категория не найдена'}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="category-page">
+      <div className="category-page__header">
+        <h1 className="category-page__title">{getPageTitle()}</h1>
+        {!listType && (
+          <label className="category-page__complete">
+            <input
+              type="checkbox"
+              checked={isCompleted}
+              onChange={handleToggleComplete}
+            />
+            <span>Категория изучена</span>
+          </label>
+        )}
+      </div>
+
       <QuestionList
         questions={questions}
-        title={title}
-        showCategoryToggle={!filter}
-        categoryId={id ? parseInt(id, 10) : undefined}
-        onUpdate={handleUpdate}
+        emptyMessage={
+          listType
+            ? `Нет вопросов в списке "${
+                listType === 'favorite'
+                  ? 'Избранное'
+                  : listType === 'known'
+                  ? 'Точно знаю'
+                  : 'Сложные'
+              }"`
+            : 'В этой категории нет вопросов'
+        }
       />
     </div>
   );

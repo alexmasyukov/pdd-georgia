@@ -1,0 +1,112 @@
+@import '@styles/variables';
+@import '@styles/mixins';
+
+.pagination {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding: $spacing-md 0;
+
+  &__controls {
+    @include flex-between;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+
+    @include mobile {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  &__per-page {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    label {
+      font-size: $font-size-base;
+      color: $text-primary;
+    }
+  }
+
+  &__select {
+    padding: $spacing-xs $spacing-sm;
+    border: 1px solid $border-color;
+    border-radius: $border-radius-sm;
+    background: $bg-dark;
+    font-size: $font-size-base;
+    color: $text-primary;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    option {
+      background: $bg-dark;
+      color: $text-primary;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $success;
+    }
+  }
+
+  &__info {
+    font-size: $font-size-base;
+    color: $text-primary;
+  }
+
+  &__pages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: $spacing-xs;
+    flex-wrap: wrap;
+  }
+
+  &__button {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 $spacing-sm;
+    border: 1px solid $border-color;
+    border-radius: $border-radius-sm;
+    background: transparent;
+    color: $text-primary;
+    font-size: $font-size-base;
+    cursor: pointer;
+    transition: $transition-fast;
+    @include flex-center;
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &--active {
+      background: $success;
+      border-color: $success;
+      color: $bg-dark;
+
+      &:hover {
+        background: darken($success, 5%);
+      }
+    }
+
+    &--prev,
+    &--next {
+      padding: 0;
+    }
+  }
+
+  &__ellipsis {
+    padding: 0 $spacing-xs;
+    color: $text-secondary;
+  }
+}

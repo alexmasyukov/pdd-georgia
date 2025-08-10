@@ -1,0 +1,27 @@
+@import '@styles/variables';
+@import '@styles/mixins';
+
+.question-list {
+  &__title {
+    font-size: $font-size-xl;
+    font-weight: 600;
+    margin: 0 0 $spacing-lg 0;
+    color: $text-primary;
+  }
+
+  &__items {
+    margin-bottom: $spacing-lg;
+  }
+
+  &__empty-message {
+    text-align: center;
+    color: $text-secondary;
+    font-size: $font-size-large;
+    padding: $spacing-xl;
+  }
+
+  &--empty {
+    @include flex-center;
+    min-height: 300px;
+  }
+}

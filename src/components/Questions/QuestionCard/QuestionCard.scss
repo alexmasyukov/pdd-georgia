@@ -1,0 +1,98 @@
+@import '@styles/variables';
+@import '@styles/mixins';
+
+.question-card {
+  background: $bg-question;
+  margin-bottom: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 854px;
+
+  &__image-section {
+    position: relative;
+    background: $bg-image;
+    overflow: hidden;
+    min-height: 126px;
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  &__image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: rgba(0, 0, 0, 0.3);
+    font-size: $font-size-base;
+  }
+
+  &__number {
+    position: absolute;
+    top: 14px;
+    left: 18px;
+    background: $bg-number;
+    color: $text-primary;
+    font-size: $font-size-base;
+    padding: 0;
+    height: 20px;
+    width: 39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+
+  &__question {
+    padding: $spacing-md;
+    text-align: center;
+    font-size: 16px;
+    color: $text-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__answers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, minmax(86px, auto));
+  }
+
+  &__actions {
+    display: flex;
+    gap: $spacing-lg;
+    justify-content: flex-end;
+    padding: $spacing-md 0;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    color: $text-link;
+    font-size: $font-size-small;
+    cursor: pointer;
+    transition: $transition-fast;
+    padding: 0;
+    
+    &:hover {
+      color: $text-primary;
+    }
+
+    svg {
+      width: 17px;
+      height: 14px;
+    }
+  }
+}

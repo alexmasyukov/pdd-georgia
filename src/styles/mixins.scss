@@ -1,0 +1,118 @@
+@import '@styles/variables.scss';
+
+// Flexbox mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// Card mixin
+@mixin card {
+  background: $card-bg;
+  border-radius: $border-radius;
+  box-shadow: $shadow-sm;
+  padding: $spacing-md;
+  transition: $transition-base;
+  
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+}
+
+// Button mixins
+@mixin button-base {
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius-sm;
+  border: none;
+  cursor: pointer;
+  font-size: $font-size-base;
+  font-family: $font-family;
+  transition: $transition-fast;
+  outline: none;
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@mixin button-primary {
+  @include button-base;
+  background: $success;
+  color: white;
+  
+  &:hover:not(:disabled) {
+    background: darken($success, 10%);
+  }
+}
+
+@mixin button-secondary {
+  @include button-base;
+  background: transparent;
+  color: $text-primary;
+  border: 1px solid $border-color;
+  
+  &:hover:not(:disabled) {
+    background: $light-gray;
+  }
+}
+
+// Text truncate
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Scrollbar
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: $light-gray;
+    border-radius: $border-radius-sm;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: $gray;
+    border-radius: $border-radius-sm;
+    
+    &:hover {
+      background: darken($gray, 10%);
+    }
+  }
+}
+
+// Media queries
+@mixin mobile {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: 768px) and (max-width: 1023px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}

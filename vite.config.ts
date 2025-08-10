@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
 import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), nodeResolve()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -16,6 +17,7 @@ export default defineConfig({
       '@utils': path.resolve(__dirname, './src/utils'),
       '@styles': path.resolve(__dirname, './src/styles'),
       '@data': path.resolve(__dirname, './src/data'),
+      '@shared-types': path.resolve(__dirname, './src/types'),
     },
   },
 })

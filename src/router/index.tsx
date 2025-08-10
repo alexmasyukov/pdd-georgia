@@ -1,37 +1,48 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Layout from '@components/Layout/Layout';
-import Header from '@components/Header/Header';
-import CategoryList from '@components/CategoryList/CategoryList';
+import { createBrowserRouter } from 'react-router-dom';
 import HomePage from '@pages/HomePage/HomePage';
 import CategoryPage from '@pages/CategoryPage/CategoryPage';
 import FavoritesPage from '@pages/FavoritesPage/FavoritesPage';
 import KnownPage from '@pages/KnownPage/KnownPage';
 import HardPage from '@pages/HardPage/HardPage';
+import MainLayout from '@components/Layout/MainLayout/MainLayout';
 
-const AppRouter: React.FC = () => {
-  return (
-    <Routes>
-      <Route 
-        path="/" 
-        element={
-          <Layout 
-            header={<Header />} 
-            sidebar={<CategoryList />}
-          />
-        }
-      >
-        <Route index element={<HomePage />} />
-        <Route path="category/:id" element={<CategoryPage />} />
-        <Route path="category/:id/favorites" element={<CategoryPage filter="favorite" />} />
-        <Route path="category/:id/known" element={<CategoryPage filter="known" />} />
-        <Route path="category/:id/hard" element={<CategoryPage filter="hard" />} />
-        <Route path="favorites" element={<FavoritesPage />} />
-        <Route path="known" element={<KnownPage />} />
-        <Route path="hard" element={<HardPage />} />
-      </Route>
-    </Routes>
-  );
-};
-
-export default AppRouter;
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <MainLayout />,
+    children: [
+      {
+        path: '/',
+        element: <HomePage />,
+      },
+      {
+        path: '/category/:id',
+        element: <CategoryPage />,
+      },
+      {
+        path: '/favorites',
+        element: <FavoritesPage />,
+      },
+      {
+        path: '/known',
+        element: <KnownPage />,
+      },
+      {
+        path: '/hard',
+        element: <HardPage />,
+      },
+      {
+        path: '/category/:id/favorites',
+        element: <CategoryPage listType="favorite" />,
+      },
+      {
+        path: '/category/:id/known',
+        element: <CategoryPage listType="known" />,
+      },
+      {
+        path: '/category/:id/hard',
+        element: <CategoryPage listType="hard" />,
+      },
+    ],
+  },
+]);

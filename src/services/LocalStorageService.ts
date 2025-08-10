@@ -1,71 +1,59 @@
-import type { Settings, ListType } from '@types';
+import type { Settings, QuestionList } from '@/types';
+import { LOCAL_STORAGE_KEYS, DEFAULT_SETTINGS } from '@utils/constants';
+import { getCategoryKey } from '@utils/helpers';
 
 class LocalStorageService {
-  private readonly SETTINGS_KEY = 'settings';
-  private readonly COMPLETE_KEY = 'complete';
-
-  // Генераторы ключей для категорий
-  getCategoryFavoriteKey(categoryId: number): string {
-    return `${categoryId}-favorite`;
-  }
-
-  getCategoryKnownKey(categoryId: number): string {
-    return `${categoryId}-known`;
-  }
-
-  getCategoryHardKey(categoryId: number): string {
-    return `${categoryId}-hard`;
-  }
-
-  private getListKey(categoryId: number, listType: ListType): string {
-    switch (listType) {
-      case 'favorite':
-        return this.getCategoryFavoriteKey(categoryId);
-      case 'known':
-        return this.getCategoryKnownKey(categoryId);
-      case 'hard':
-        return this.getCategoryHardKey(categoryId);
+  private getItem<T>(key: string): T | null {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : null;
+    } catch (error) {
+      console.error(`Error reading from localStorage key "${key}":`, error);
+      return null;
     }
   }
 
-  // Работа с настройками
+  private setItem<T>(key: string, value: T): void {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      console.error(`Error writing to localStorage key "${key}":`, error);
+    }
+  }
+
+  private removeItem(key: string): void {
+    try {
+      localStorage.removeItem(key);
+    } catch (error) {
+      console.error(`Error removing localStorage key "${key}":`, error);
+    }
+  }
+
+  // Settings
   getSettings(): Settings {
-    const settings = localStorage.getItem(this.SETTINGS_KEY);
-    if (settings) {
-      return JSON.parse(settings);
-    }
-    return { perPage: 10 };
+    const settings = this.getItem<Settings>(LOCAL_STORAGE_KEYS.SETTINGS);
+    return settings || DEFAULT_SETTINGS;
   }
 
-  updateSettings(settings: Partial<Settings>): void {
+  setSettings(settings: Settings): void {
+    this.setItem(LOCAL_STORAGE_KEYS.SETTINGS, settings);
+  }
+
+  updateSettings(partialSettings: Partial<Settings>): void {
     const currentSettings = this.getSettings();
-    const newSettings = { ...currentSettings, ...settings };
-    localStorage.setItem(this.SETTINGS_KEY, JSON.stringify(newSettings));
+    this.setSettings({ ...currentSettings, ...partialSettings });
   }
 
-  getPerPage(): number {
-    return this.getSettings().perPage;
+  // Completed categories
+  getCompletedCategories(): string[] {
+    return this.getItem<string[]>(LOCAL_STORAGE_KEYS.COMPLETE) || [];
   }
 
-  setPerPage(value: number): void {
-    this.updateSettings({ perPage: value });
+  setCompletedCategories(categories: string[]): void {
+    this.setItem(LOCAL_STORAGE_KEYS.COMPLETE, categories);
   }
 
-  // Работа с изученными категориями
-  getCompletedCategories(): number[] {
-    const completed = localStorage.getItem(this.COMPLETE_KEY);
-    if (completed) {
-      return JSON.parse(completed);
-    }
-    return [];
-  }
-
-  isCategoryCompleted(categoryId: number): boolean {
-    const completed = this.getCompletedCategories();
-    return completed.includes(categoryId);
-  }
-
-  toggleCategoryCompleted(categoryId: number): void {
+  toggleCategoryComplete(categoryId: string): boolean {
     const completed = this.getCompletedCategories();
     const index = completed.indexOf(categoryId);
     
@@ -75,89 +63,122 @@ class LocalStorageService {
       completed.splice(index, 1);
     }
     
-    localStorage.setItem(this.COMPLETE_KEY, JSON.stringify(completed));
+    this.setCompletedCategories(completed);
+    return index === -1;
   }
 
-  // Работа со списками вопросов
-  private getQuestionIds(key: string): number[] {
-    const data = localStorage.getItem(key);
-    if (data) {
-      return JSON.parse(data);
+  isCategoryCompleted(categoryId: string): boolean {
+    const completed = this.getCompletedCategories();
+    return completed.includes(categoryId);
+  }
+
+  // Question lists (favorite, known, hard)
+  getQuestionIdsByCategory(categoryId: string, listType: QuestionList): number[] {
+    const key = getCategoryKey(categoryId, listType);
+    return this.getItem<number[]>(key) || [];
+  }
+
+  setQuestionIdsByCategory(categoryId: string, listType: QuestionList, ids: number[]): void {
+    const key = getCategoryKey(categoryId, listType);
+    if (ids.length === 0) {
+      this.removeItem(key);
+    } else {
+      this.setItem(key, ids);
     }
-    return [];
   }
 
-  private setQuestionIds(key: string, ids: number[]): void {
-    localStorage.setItem(key, JSON.stringify(ids));
+  addQuestionToList(categoryId: string, listType: QuestionList, questionId: number): void {
+    const ids = this.getQuestionIdsByCategory(categoryId, listType);
+    if (!ids.includes(questionId)) {
+      ids.push(questionId);
+      this.setQuestionIdsByCategory(categoryId, listType, ids);
+    }
   }
 
-  getFavoriteQuestionIds(categoryId: number): number[] {
-    return this.getQuestionIds(this.getCategoryFavoriteKey(categoryId));
+  removeQuestionFromList(categoryId: string, listType: QuestionList, questionId: number): void {
+    const ids = this.getQuestionIdsByCategory(categoryId, listType);
+    const index = ids.indexOf(questionId);
+    if (index !== -1) {
+      ids.splice(index, 1);
+      this.setQuestionIdsByCategory(categoryId, listType, ids);
+    }
   }
 
-  getKnownQuestionIds(categoryId: number): number[] {
-    return this.getQuestionIds(this.getCategoryKnownKey(categoryId));
-  }
-
-  getHardQuestionIds(categoryId: number): number[] {
-    return this.getQuestionIds(this.getCategoryHardKey(categoryId));
-  }
-
-  // Добавление/удаление из списков
-  toggleQuestionInList(categoryId: number, questionId: number, listType: ListType): void {
-    const key = this.getListKey(categoryId, listType);
-    const ids = this.getQuestionIds(key);
+  toggleQuestionInList(categoryId: string, listType: QuestionList, questionId: number): boolean {
+    const ids = this.getQuestionIdsByCategory(categoryId, listType);
     const index = ids.indexOf(questionId);
     
     if (index === -1) {
-      ids.push(questionId);
+      this.addQuestionToList(categoryId, listType, questionId);
+      return true;
     } else {
-      ids.splice(index, 1);
+      this.removeQuestionFromList(categoryId, listType, questionId);
+      return false;
     }
-    
-    this.setQuestionIds(key, ids);
   }
 
-  isQuestionInList(categoryId: number, questionId: number, listType: ListType): boolean {
-    const key = this.getListKey(categoryId, listType);
-    const ids = this.getQuestionIds(key);
+  isQuestionInList(categoryId: string, listType: QuestionList, questionId: number): boolean {
+    const ids = this.getQuestionIdsByCategory(categoryId, listType);
     return ids.includes(questionId);
   }
 
-  // Получение всех вопросов из списка по всем категориям
-  private getAllQuestionsByListType(listType: ListType): { categoryId: number; questionId: number }[] {
-    const result: { categoryId: number; questionId: number }[] = [];
+  // Get all question IDs from all categories for a specific list type
+  getAllQuestionIdsByListType(listType: QuestionList): number[] {
+    const allIds: number[] = [];
     const keys = Object.keys(localStorage);
     
     keys.forEach(key => {
-      const match = key.match(/^(\d+)-(\w+)$/);
-      if (match && match[2] === listType) {
-        const categoryId = parseInt(match[1], 10);
-        const questionIds = this.getQuestionIds(key);
-        questionIds.forEach(questionId => {
-          result.push({ categoryId, questionId });
-        });
+      if (key.endsWith(`-${listType}`)) {
+        const ids = this.getItem<number[]>(key);
+        if (ids) {
+          allIds.push(...ids);
+        }
       }
     });
     
-    return result;
+    return [...new Set(allIds)]; // Remove duplicates
   }
 
-  getAllFavoriteQuestionIds(): { categoryId: number; questionId: number }[] {
-    return this.getAllQuestionsByListType('favorite');
+  // Get counts for a category
+  getCategoryListCounts(categoryId: string): {
+    favoriteCount: number;
+    knownCount: number;
+    hardCount: number;
+  } {
+    return {
+      favoriteCount: this.getQuestionIdsByCategory(categoryId, 'favorite').length,
+      knownCount: this.getQuestionIdsByCategory(categoryId, 'known').length,
+      hardCount: this.getQuestionIdsByCategory(categoryId, 'hard').length,
+    };
   }
 
-  getAllKnownQuestionIds(): { categoryId: number; questionId: number }[] {
-    return this.getAllQuestionsByListType('known');
-  }
-
-  getAllHardQuestionIds(): { categoryId: number; questionId: number }[] {
-    return this.getAllQuestionsByListType('hard');
-  }
-
-  // Очистка всех данных (для отладки)
+  // Clear all data
   clearAll(): void {
     localStorage.clear();
+  }
+
+  // Export all data
+  exportData(): Record<string, any> {
+    const data: Record<string, any> = {};
+    const keys = Object.keys(localStorage);
+    
+    keys.forEach(key => {
+      const value = this.getItem(key);
+      if (value !== null) {
+        data[key] = value;
+      }
+    });
+    
+    return data;
+  }
+
+  // Import data
+  importData(data: Record<string, any>): void {
+    this.clearAll();
+    
+    Object.entries(data).forEach(([key, value]) => {
+      this.setItem(key, value);
+    });
   }
 }
 

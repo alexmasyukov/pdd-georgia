@@ -1,0 +1,25 @@
+@import '@styles/variables';
+@import '@styles/mixins';
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 0; // Categories will handle their own spacing
+  }
+
+  &__loader,
+  &__error {
+    padding: $spacing-lg;
+    text-align: center;
+    color: $text-secondary;
+  }
+
+  &__error {
+    color: $error;
+  }
+}

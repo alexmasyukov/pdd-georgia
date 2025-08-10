@@ -25,6 +25,7 @@
       "@utils/*": ["src/utils/*"],
       "@styles/*": ["src/styles/*"],
       "@data/*": ["src/data/*"],
+      "@shared-types/*": ["src/types/*"],
     },
 
     /* Linting */

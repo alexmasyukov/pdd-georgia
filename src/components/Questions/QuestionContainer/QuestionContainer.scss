@@ -1,0 +1,50 @@
+@import '@styles/variables';
+@import '@styles/mixins';
+
+.question-container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  align-items: flex-end;
+  margin-bottom: 45px;
+
+  &__buttons {
+    display: flex;
+    gap: $spacing-lg;
+    justify-content: flex-end;
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: none;
+    border: none;
+    color: $text-link;
+    font-size: 13px;
+    cursor: pointer;
+    transition: $transition-fast;
+    padding: 0;
+    
+    &:hover {
+      color: $text-primary;
+    }
+
+    svg {
+      width: 17px;
+      height: 14px;
+    }
+
+    &--favorite {
+      color: #ffa726;
+    }
+
+    &--known {
+      color: #66bb6a;
+    }
+
+    &--hard {
+      color: #f44336;
+    }
+  }
+}

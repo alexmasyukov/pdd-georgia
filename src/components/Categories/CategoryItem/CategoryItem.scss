@@ -1,0 +1,77 @@
+@import '@styles/variables';
+@import '@styles/mixins';
+
+.category-item {
+  position: relative;
+  margin-bottom: 10px;
+
+  &__main {
+    background: $bg-category;
+    border-radius: $border-radius;
+    padding: $spacing-sm $spacing-md;
+    min-height: 51px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover {
+      background: #171717;
+    }
+  }
+
+  // Активная/выделенная категория
+  &--active {
+    .category-item__main {
+      background: $bg-category-active;
+    }
+  }
+
+  // Изученная категория
+  &--completed {
+    .category-item__main {
+      background: $bg-category-completed;
+    }
+  }
+
+  &--completed {
+    .category-item__main {
+      background: $bg-category-completed;
+    }
+  }
+
+  &__name {
+    font-family: $font-family;
+    font-size: $font-size-base;
+    font-weight: bold;
+    color: $text-primary;
+    margin: 0;
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    margin-top: 6px;
+    padding-right: 0;
+  }
+
+  &__link {
+    font-family: $font-family;
+    font-size: $font-size-base;
+    color: $text-secondary;
+    text-decoration: none;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover {
+      color: $text-primary;
+    }
+
+    &--active {
+      font-weight: bold;
+      color: $text-primary;
+    }
+  }
+}

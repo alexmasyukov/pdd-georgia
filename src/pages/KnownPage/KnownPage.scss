@@ -1,0 +1,40 @@
+@import '@styles/variables';
+@import '@styles/mixins';
+
+.known-page {
+  &__header {
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-md;
+    border-bottom: 1px solid $border-color;
+  }
+
+  &__title {
+    font-size: 24px;
+    color: $text-primary;
+    margin: 0 0 $spacing-sm 0;
+  }
+
+  &__description {
+    font-size: $font-size-base;
+    color: $text-secondary;
+    margin: 0;
+  }
+
+  &__loader,
+  &__error {
+    padding: $spacing-xl;
+    text-align: center;
+    font-size: $font-size-large;
+    color: $text-secondary;
+  }
+
+  &__error {
+    color: $error;
+  }
+
+  &--loading,
+  &--error {
+    @include flex-center;
+    min-height: 400px;
+  }
+}
