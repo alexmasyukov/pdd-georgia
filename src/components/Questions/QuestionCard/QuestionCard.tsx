@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { HelpCircle, X } from 'lucide-react';
 import AnswerOption from '../AnswerOption/AnswerOption';
 import QuestionService from '@services/QuestionService';
 import type { Question } from '@/types';
@@ -13,7 +14,7 @@ interface QuestionCardProps {
 const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
-  const [imageError, setImageError] = useState(false);
+  const [showHint, setShowHint] = useState(false);
 
   const answers = QuestionService.getAnswers(question);
 
@@ -27,25 +28,43 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
 
   return (
     <div className="question-card">
+      {question.question_explained && (
+        <button 
+          className="question-card__hint-button"
+          onClick={() => setShowHint(true)}
+          type="button"
+          aria-label="Показать подсказку"
+        >
+          <HelpCircle size={20} />
+        </button>
+      )}
+      {showHint && question.question_explained && (
+        <div className="question-card__hint">
+          <button 
+            className="question-card__hint-close"
+            onClick={() => setShowHint(false)}
+            type="button"
+            aria-label="Закрыть подсказку"
+          >
+            <X size={16} />
+          </button>
+          <div className="question-card__hint-content">
+            {question.question_explained}
+          </div>
+        </div>
+      )}
       <div className="question-card__image-section">
         <span className="question-card__number">
           {formatQuestionNumber(question.id)}
         </span>
         {question.hasImg === 1 && question.img ? (
-          !imageError ? (
-            <img
-              src={getImageUrl(question.img)}
-              alt="Изображение к вопросу"
-              onError={() => setImageError(true)}
-            />
-          ) : (
-            <div className="question-card__image-placeholder">
-              Изображение недоступно
-            </div>
-          )
+          <img
+            src={getImageUrl(question.img)}
+            alt="Изображение к вопросу"
+          />
         ) : (
           <div className="question-card__image-placeholder">
-            {/* Empty placeholder when no image */}
+            {/* Placeholder with background image */}
           </div>
         )}
       </div>

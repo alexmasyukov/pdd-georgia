@@ -2,6 +2,7 @@ import React from 'react';
 import { Star, CheckCircle, AlertCircle } from 'lucide-react';
 import QuestionCard from '../QuestionCard/QuestionCard';
 import QuestionService from '@services/QuestionService';
+import useCategoryUpdateStore from '@stores/useCategoryUpdateStore';
 import type { Question } from '@/types';
 import './QuestionContainer.scss';
 
@@ -12,9 +13,11 @@ interface QuestionContainerProps {
 
 const QuestionContainer: React.FC<QuestionContainerProps> = ({ question, onQuestionUpdate }) => {
   const stats = QuestionService.getQuestionStats(question);
+  const triggerCategoryButtonsUpdate = useCategoryUpdateStore(state => state.triggerCategoryButtonsUpdate);
 
   const toggleList = (listType: 'favorite' | 'known' | 'hard') => {
     QuestionService.toggleQuestionInList(question, listType);
+    triggerCategoryButtonsUpdate();
     onQuestionUpdate?.();
   };
 

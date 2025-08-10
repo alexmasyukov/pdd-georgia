@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CategoryItem from '../CategoryItem/CategoryItem';
 import CategoryService from '@services/CategoryService';
+import useCategoryUpdateStore from '@stores/useCategoryUpdateStore';
 import type { Category, CategoryStats } from '@/types';
 import './CategoryList.scss';
 
@@ -11,10 +12,17 @@ const CategoryList: React.FC = () => {
   const [categoriesStats, setCategoriesStats] = useState<Record<string, CategoryStats>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const needToCategoryButtonsUpdate = useCategoryUpdateStore(state => state.needToCategoryButtonsUpdate);
 
   useEffect(() => {
     loadCategories();
   }, []);
+
+  useEffect(() => {
+    if (needToCategoryButtonsUpdate && activeCategoryId) {
+      loadCategoryStats(activeCategoryId);
+    }
+  }, [needToCategoryButtonsUpdate, activeCategoryId]);
 
   const loadCategories = async () => {
     try {
@@ -31,15 +39,16 @@ const CategoryList: React.FC = () => {
     }
   };
 
-  const handleCategoryComplete = (categoryId: string) => {
-    const isCompleted = CategoryService.toggleCategoryComplete(categoryId);
-    setCategoriesStats(prev => ({
-      ...prev,
-      [categoryId]: {
-        ...prev[categoryId],
-        isCompleted,
-      },
-    }));
+  const loadCategoryStats = async (categoryId: string) => {
+    try {
+      const stats = await CategoryService.getCategoryStats(categoryId);
+      setCategoriesStats(prev => ({
+        ...prev,
+        [categoryId]: stats,
+      }));
+    } catch (err) {
+      console.error('Error loading category stats:', err);
+    }
   };
 
   if (loading) {
@@ -60,7 +69,6 @@ const CategoryList: React.FC = () => {
 
   return (
     <div className="category-list">
-      <h2 className="category-list__title">Категории</h2>
       <div className="category-list__items">
         {categories.map(category => (
           <CategoryItem

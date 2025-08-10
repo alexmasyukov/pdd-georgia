@@ -14,16 +14,22 @@
     align-items: center;
     cursor: pointer;
     transition: $transition-fast;
+    color: #b5aea5;
 
     &:hover {
-      background: #171717;
+      background: #525252;
     }
   }
 
   // Активная/выделенная категория
   &--active {
+
     .category-item__main {
       background: $bg-category-active;
+      font-weight: bold !important;
+      color: #fff;
+
+      background: #924f4f !important;
     }
   }
 
@@ -34,17 +40,12 @@
     }
   }
 
-  &--completed {
-    .category-item__main {
-      background: $bg-category-completed;
-    }
-  }
+
 
   &__name {
     font-family: $font-family;
     font-size: $font-size-base;
     font-weight: bold;
-    color: $text-primary;
     margin: 0;
   }
 
@@ -70,8 +71,8 @@
     }
 
     &--active {
-      font-weight: bold;
-      color: $text-primary;
+      font-weight: bold !important;
+      color: #fff;
     }
   }
 }

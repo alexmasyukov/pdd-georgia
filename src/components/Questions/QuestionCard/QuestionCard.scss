@@ -24,12 +24,12 @@
   }
 
   &__image-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: rgba(0, 0, 0, 0.3);
-    font-size: $font-size-base;
+    height: 126px;
+    background-image: url('/images/shss.png');
+    background-color: #14323b;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 
   &__number {
@@ -46,6 +46,7 @@
     align-items: center;
     justify-content: center;
     z-index: 1;
+    opacity: 0.6;
   }
 
   &__question {
@@ -56,6 +57,69 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+  }
+
+  &__hint-button {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    background: none;
+    border: none;
+    color: #181a1a;
+    opacity: 0.6;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: $transition-fast;
+    z-index: 2;
+
+    &:hover {
+      color: $text-primary;
+    }
+  }
+
+  &__hint {
+    position: absolute;
+    top: 44px;
+    right: 18px;
+    background: $bg-dark;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    padding: $spacing-md;
+    max-width: 400px;
+    min-width: 250px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &__hint-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    color: $text-secondary;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: $transition-fast;
+
+    &:hover {
+      color: $text-primary;
+    }
+  }
+
+  &__hint-content {
+    padding-right: 30px;
+    font-size: $font-size-small;
+    line-height: 1.5;
+    color: $text-primary;
+    text-align: left;
   }
 
   &__answers {
