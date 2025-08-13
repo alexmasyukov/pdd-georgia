@@ -8,10 +8,11 @@ import './QuestionContainer.scss';
 
 interface QuestionContainerProps {
   question: Question;
+  showDetailedHint?: boolean;
   onQuestionUpdate?: () => void;
 }
 
-const QuestionContainer: React.FC<QuestionContainerProps> = ({ question, onQuestionUpdate }) => {
+const QuestionContainer: React.FC<QuestionContainerProps> = ({ question, showDetailedHint, onQuestionUpdate }) => {
   const stats = QuestionService.getQuestionStats(question);
   const triggerCategoryButtonsUpdate = useCategoryUpdateStore(state => state.triggerCategoryButtonsUpdate);
 
@@ -23,7 +24,7 @@ const QuestionContainer: React.FC<QuestionContainerProps> = ({ question, onQuest
 
   return (
     <div className="question-container">
-      <QuestionCard question={question} onQuestionUpdate={onQuestionUpdate} />
+      <QuestionCard question={question} showDetailedHint={showDetailedHint} onQuestionUpdate={onQuestionUpdate} />
       
       <div className="question-container__buttons">
         <button
@@ -31,7 +32,7 @@ const QuestionContainer: React.FC<QuestionContainerProps> = ({ question, onQuest
           onClick={() => toggleList('favorite')}
           type="button"
         >
-          <Star size={17} stroke={stats.isFavorite ? 'currentColor' : 'none'} />
+          <Star size={17} stroke={'currentColor'} />
           <span>{stats.isFavorite ? 'В избранном' : 'В избранное'}</span>
         </button>
 
@@ -40,7 +41,7 @@ const QuestionContainer: React.FC<QuestionContainerProps> = ({ question, onQuest
           onClick={() => toggleList('known')}
           type="button"
         >
-          <CheckCircle size={17} stroke={stats.isKnown ? 'currentColor' : 'none'} />
+          <CheckCircle size={17} stroke={'currentColor'} />
           <span>{stats.isKnown ? 'Точно знаю' : 'Точно знаю ответ'}</span>
         </button>
 
@@ -49,7 +50,7 @@ const QuestionContainer: React.FC<QuestionContainerProps> = ({ question, onQuest
           onClick={() => toggleList('hard')}
           type="button"
         >
-          <AlertCircle size={17} stroke={stats.isHard ? 'currentColor' : 'none'} />
+          <AlertCircle size={17} stroke={'currentColor'} />
           <span>{stats.isHard ? 'Сложный' : 'Плохо запоминается'}</span>
         </button>
       </div>

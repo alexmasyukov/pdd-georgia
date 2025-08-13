@@ -11,6 +11,7 @@ interface QuestionListProps {
   title?: string;
   showPagination?: boolean;
   emptyMessage?: string;
+  showDetailedHint?: boolean;
 }
 
 const QuestionList: React.FC<QuestionListProps> = ({
@@ -18,6 +19,7 @@ const QuestionList: React.FC<QuestionListProps> = ({
   title,
   showPagination = true,
   emptyMessage = 'Нет вопросов для отображения',
+  showDetailedHint = false,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(
@@ -57,9 +59,12 @@ const QuestionList: React.FC<QuestionListProps> = ({
     setRefreshKey(prev => prev + 1);
   };
 
+  // Sort questions by id
+  const sortedQuestions = [...questions].sort((a, b) => a.id - b.id);
+
   const paginatedQuestions = showPagination
-    ? paginateItems(questions, currentPage, itemsPerPage)
-    : questions;
+    ? paginateItems(sortedQuestions, currentPage, itemsPerPage)
+    : sortedQuestions;
 
   const totalPages = Math.ceil(questions.length / itemsPerPage);
 
@@ -80,6 +85,7 @@ const QuestionList: React.FC<QuestionListProps> = ({
           <QuestionContainer
             key={question.id}
             question={question}
+            showDetailedHint={showDetailedHint}
             onQuestionUpdate={handleQuestionUpdate}
           />
         ))}

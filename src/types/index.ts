@@ -9,6 +9,7 @@ export interface Question {
   hasImg: 0 | 1;
   img?: string;
   question_explained: string;
+  question_explained_detailed?: string;
   audio?: string | null;
   category: number;
 }
@@ -49,5 +50,5 @@ export interface AnswerState {
 export interface LocalStorageData {
   settings: Settings;
   complete: string[];
-  [key: string]: any;
+  [key: string]: unknown;
 }

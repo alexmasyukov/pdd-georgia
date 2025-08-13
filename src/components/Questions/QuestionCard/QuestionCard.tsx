@@ -8,10 +8,11 @@ import './QuestionCard.scss';
 
 interface QuestionCardProps {
   question: Question;
+  showDetailedHint?: boolean;
   onQuestionUpdate?: () => void;
 }
 
-const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
+const QuestionCard: React.FC<QuestionCardProps> = ({ question, showDetailedHint = false }) => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [showHint, setShowHint] = useState(false);
@@ -72,6 +73,14 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
       <div className="question-card__question">
         {question.question}
       </div>
+
+      {showDetailedHint && question.question_explained_detailed && (
+        <div className="question-card__detailed-hint">
+          <div className="question-card__detailed-hint-content">
+            {question.question_explained_detailed}
+          </div>
+        </div>
+      )}
 
       <div className="question-card__answers">
         {answers.map((answer) => {

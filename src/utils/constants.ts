@@ -1,6 +1,7 @@
 export const LOCAL_STORAGE_KEYS = {
   SETTINGS: 'settings',
   COMPLETE: 'complete',
+  SHOW_DETAILED_HINT: 'showDetailedHint',
 } as const;
 
 export const DEFAULT_SETTINGS = {

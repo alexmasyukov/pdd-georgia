@@ -72,6 +72,15 @@ class LocalStorageService {
     return completed.includes(categoryId);
   }
 
+  // Show detailed hint setting
+  getShowDetailedHint(): boolean {
+    return this.getItem<boolean>(LOCAL_STORAGE_KEYS.SHOW_DETAILED_HINT) || false;
+  }
+
+  setShowDetailedHint(value: boolean): void {
+    this.setItem(LOCAL_STORAGE_KEYS.SHOW_DETAILED_HINT, value);
+  }
+
   // Question lists (favorite, known, hard)
   getQuestionIdsByCategory(categoryId: string, listType: QuestionList): number[] {
     const key = getCategoryKey(categoryId, listType);
@@ -158,8 +167,8 @@ class LocalStorageService {
   }
 
   // Export all data
-  exportData(): Record<string, any> {
-    const data: Record<string, any> = {};
+  exportData(): Record<string, unknown> {
+    const data: Record<string, unknown> = {};
     const keys = Object.keys(localStorage);
     
     keys.forEach(key => {
@@ -173,7 +182,7 @@ class LocalStorageService {
   }
 
   // Import data
-  importData(data: Record<string, any>): void {
+  importData(data: Record<string, unknown>): void {
     this.clearAll();
     
     Object.entries(data).forEach(([key, value]) => {

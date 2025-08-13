@@ -19,7 +19,14 @@
     margin: 0;
   }
 
-  &__complete {
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  &__complete,
+  &__detailed-hint {
     display: flex;
     align-items: center;
     gap: 8px;

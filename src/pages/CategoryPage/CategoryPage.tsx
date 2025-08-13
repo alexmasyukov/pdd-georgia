@@ -16,38 +16,41 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ listType }) => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [category, setCategory] = useState<Category | null>(null);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showDetailedHint, setShowDetailedHint] = useState(
+    LocalStorageService.getShowDetailedHint()
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const loadData = async () => {
+      if (!id) return;
+      
+      try {
+        setLoading(true);
+        setError(null);
+
+        const [categoryData, questionsData] = await Promise.all([
+          CategoryService.getCategoryById(id),
+          listType
+            ? QuestionService.getQuestionsByCategoryAndList(id, listType)
+            : QuestionService.getQuestionsByCategory(id),
+        ]);
+
+        setCategory(categoryData);
+        setQuestions(questionsData);
+        setIsCompleted(LocalStorageService.isCategoryCompleted(id));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (id) {
       loadData();
     }
   }, [id, listType]);
-
-  const loadData = async () => {
-    if (!id) return;
-    
-    try {
-      setLoading(true);
-      setError(null);
-
-      const [categoryData, questionsData] = await Promise.all([
-        CategoryService.getCategoryById(id),
-        listType
-          ? QuestionService.getQuestionsByCategoryAndList(id, listType)
-          : QuestionService.getQuestionsByCategory(id),
-      ]);
-
-      setCategory(categoryData);
-      setQuestions(questionsData);
-      setIsCompleted(LocalStorageService.isCategoryCompleted(id));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load data');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleToggleComplete = () => {
     if (!id) return;
@@ -89,19 +92,34 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ listType }) => {
       <div className="category-page__header">
         <h1 className="category-page__title">{getPageTitle()}</h1>
         {!listType && (
-          <label className="category-page__complete">
-            <input
-              type="checkbox"
-              checked={isCompleted}
-              onChange={handleToggleComplete}
-            />
-            <span>Категория изучена</span>
-          </label>
+          <div className="category-page__controls">
+            <label className="category-page__complete">
+              <input
+                type="checkbox"
+                checked={isCompleted}
+                onChange={handleToggleComplete}
+              />
+              <span>Категория изучена</span>
+            </label>
+            <label className="category-page__detailed-hint">
+              <input
+                type="checkbox"
+                checked={showDetailedHint}
+                onChange={(e) => {
+                  const value = e.target.checked;
+                  setShowDetailedHint(value);
+                  LocalStorageService.setShowDetailedHint(value);
+                }}
+              />
+              <span>Показывать вторую подсказку</span>
+            </label>
+          </div>
         )}
       </div>
 
       <QuestionList
         questions={questions}
+        showDetailedHint={showDetailedHint}
         emptyMessage={
           listType
             ? `Нет вопросов в списке "${
