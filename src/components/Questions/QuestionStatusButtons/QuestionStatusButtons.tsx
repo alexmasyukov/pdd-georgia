@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { Star, CheckCircle, AlertCircle } from 'lucide-react';
 import QuestionService from '@services/QuestionService';
 import useCategoryUpdateStore from '@stores/useCategoryUpdateStore';
@@ -6,20 +6,23 @@ import type { Question } from '@/types';
 
 interface QuestionStatusButtonsProps {
   question: Question;
-  // onStatusChange?: () => void;
 }
 
 const QuestionStatusButtons: React.FC<QuestionStatusButtonsProps> = memo(({ 
   question, 
-  // onStatusChange
 }) => {
-  const stats = QuestionService.getQuestionStats(question);
+  const [stats, setStats] = useState(QuestionService.getQuestionStats(question));
   const triggerCategoryButtonsUpdate = useCategoryUpdateStore(state => state.triggerCategoryButtonsUpdate);
 
   const toggleList = (listType: 'favorite' | 'known' | 'hard') => {
     QuestionService.toggleQuestionInList(question, listType);
+    setStats(prev => ({
+      ...prev,
+      isFavorite: listType === 'favorite' ? !prev.isFavorite : prev.isFavorite,
+      isKnown: listType === 'known' ? !prev.isKnown : prev.isKnown,
+      isHard: listType === 'hard' ? !prev.isHard : prev.isHard,
+    }));
     triggerCategoryButtonsUpdate();
-    // onStatusChange?.();
   };
 
   return (
