@@ -32,6 +32,7 @@ export interface CategoryStats {
   knownCount: number;
   hardCount: number;
   isCompleted: boolean;
+  totalCount: number;
 }
 
 export interface PaginationState {

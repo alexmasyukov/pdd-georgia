@@ -23,13 +23,16 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
   const favoriteCount = stats?.favoriteCount || 0;
   const knownCount = stats?.knownCount || 0;
   const hardCount = stats?.hardCount || 0;
+  const totalCount = stats?.totalCount || 0;
 
   const isCompleted = stats?.isCompleted || false;
 
   return (
     <div className={`category-item ${isActive ? 'category-item--active' : ''} ${isCompleted ? 'category-item--completed' : ''}`}>
       <div className="category-item__main" onClick={handleCategoryClick}>
-        <h3 className="category-item__name">{category.id}. {category.name}</h3>
+        <h3 className="category-item__name">
+          {category.id}. {category.name} {totalCount > 0 && <span className="category-item__count">({totalCount})</span>}
+        </h3>
       </div>
       
       <div className="category-item__links">

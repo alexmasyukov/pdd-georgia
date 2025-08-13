@@ -75,10 +75,13 @@ class CategoryService {
   async getCategoryStats(categoryId: string): Promise<CategoryStats> {
     const counts = LocalStorageService.getCategoryListCounts(categoryId);
     const isCompleted = LocalStorageService.isCategoryCompleted(categoryId);
+    const questions = await QuestionService.getQuestionsByCategory(categoryId);
+    const totalCount = questions.length;
     
     return {
       ...counts,
       isCompleted,
+      totalCount,
     };
   }
 
