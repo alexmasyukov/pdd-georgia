@@ -1,0 +1,22 @@
+@import '@styles/variables';
+@import '@styles/mixins';
+
+.category-list-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &__link {
+    color: $text-secondary;
+    text-decoration: underline;
+    font-size: 14px;
+    transition: color 0.2s ease;
+
+
+
+    &--active {
+      color: #ee8787;
+      text-decoration: none;
+    }
+  }
+}

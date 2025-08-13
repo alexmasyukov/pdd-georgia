@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import QuestionList from '@components/Questions/QuestionList/QuestionList';
+import CategoryListLinks from '@components/Categories/CategoryListLinks/CategoryListLinks';
 import QuestionService from '@services/QuestionService';
 import CategoryService from '@services/CategoryService';
 import LocalStorageService from '@services/LocalStorageService';
@@ -62,11 +63,24 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ listType }) => {
     if (!category) return '';
     
     let title = category.name;
-    if (listType === 'favorite') title += ' - Избранное';
-    if (listType === 'known') title += ' - Точно знаю';
-    if (listType === 'hard') title += ' - Сложные';
+    if (listType === 'favorite') title = `⭐ Избранное - ${title}`;
+    if (listType === 'known') title = `✅ Точно знаю - ${title} `;
+    if (listType === 'hard') title = `🔥 Сложные - ${title}`;
     
     return title;
+  };
+
+  const getPageDescription = () => {
+    if (listType === 'favorite') {
+      return 'Избранные вопросы из этой категории';
+    }
+    if (listType === 'known') {
+      return 'Вопросы, на которые вы точно знаете правильный ответ';
+    }
+    if (listType === 'hard') {
+      return 'Вопросы, которые требуют дополнительного внимания и повторения';
+    }
+    return null;
   };
 
   if (loading) {
@@ -91,30 +105,41 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ listType }) => {
     <div className="category-page">
       <div className="category-page__header">
         <h1 className="category-page__title">{getPageTitle()}</h1>
-        {!listType && (
-          <div className="category-page__controls">
-            <label className="category-page__complete">
-              <input
-                type="checkbox"
-                checked={isCompleted}
-                onChange={handleToggleComplete}
-              />
-              <span>Категория изучена</span>
-            </label>
-            <label className="category-page__detailed-hint">
-              <input
-                type="checkbox"
-                checked={showDetailedHint}
-                onChange={(e) => {
-                  const value = e.target.checked;
-                  setShowDetailedHint(value);
-                  LocalStorageService.setShowDetailedHint(value);
-                }}
-              />
-              <span>Показывать вторую подсказку</span>
-            </label>
-          </div>
+        {listType && (
+          <p className="category-page__description">{getPageDescription()}</p>
         )}
+        <hr className="category-page__divider" />
+        <div className="category-page__header-content">
+          {id && (
+            <div className="category-page__links">
+              <CategoryListLinks categoryId={id} />
+            </div>
+          )}
+          {!listType && (
+            <div className="category-page__controls">
+              <label className="category-page__complete">
+                <input
+                  type="checkbox"
+                  checked={isCompleted}
+                  onChange={handleToggleComplete}
+                />
+                <span>Категория изучена</span>
+              </label>
+              <label className="category-page__detailed-hint">
+                <input
+                  type="checkbox"
+                  checked={showDetailedHint}
+                  onChange={(e) => {
+                    const value = e.target.checked;
+                    setShowDetailedHint(value);
+                    LocalStorageService.setShowDetailedHint(value);
+                  }}
+                />
+                <span>Показывать вторую подсказку</span>
+              </label>
+            </div>
+          )}
+        </div>
       </div>
 
       <QuestionList

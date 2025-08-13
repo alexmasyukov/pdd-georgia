@@ -3,22 +3,15 @@
 
 .category-page {
   &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: $spacing-xl;
-    padding: 3px 0;
-    height: 23px;
     width: 850px;
+    border: 1px dashed #6b7280;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 25px;
     
     @include mobile {
       width: 100%;
-      height: auto;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: $spacing-lg;
-      padding: 16px 0;
+      padding: 12px;
     }
   }
 
@@ -26,22 +19,59 @@
     font-size: $font-size-title;
     font-weight: bold;
     color: $text-primary;
-    margin: 0;
+    margin: 0 0 12px 0;
     
     @include mobile {
       font-size: 18px;
+      margin-bottom: 12px;
     }
+  }
+
+  &__description {
+    color: $text-secondary;
+    font-size: 14px;
+    margin: 0 0 12px 0;
+    
+    @include mobile {
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+  }
+
+  &__divider {
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0 0 12px 0;
+    
+    @include mobile {
+      margin-bottom: 16px;
+    }
+  }
+
+  &__header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    
+    @include mobile {
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
+
+  &__links {
+    display: flex;
+    align-items: flex-start;
   }
 
   &__controls {
     display: flex;
-    align-items: center;
-    gap: 20px;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
     
     @include mobile {
-      flex-direction: column;
       align-items: flex-start;
-      gap: 12px;
       width: 100%;
     }
   }
