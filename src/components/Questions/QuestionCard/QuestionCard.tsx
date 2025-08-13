@@ -16,6 +16,18 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, showDetailedHint 
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 767);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const answers = QuestionService.getAnswers(question);
 
@@ -59,10 +71,23 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, showDetailedHint 
           {formatQuestionNumber(question.id)}
         </span>
         {question.hasImg === 1 && question.img ? (
-          <img
-            src={getImageUrl(question.img)}
-            alt="Изображение к вопросу"
-          />
+          isMobile ? (
+            <a 
+              href={getImageUrl(question.img)} 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <img
+                src={getImageUrl(question.img)}
+                alt="Изображение к вопросу"
+              />
+            </a>
+          ) : (
+            <img
+              src={getImageUrl(question.img)}
+              alt="Изображение к вопросу"
+            />
+          )
         ) : (
           <div className="question-card__image-placeholder">
             {/* Placeholder with background image */}

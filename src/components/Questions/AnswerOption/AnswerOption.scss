@@ -13,6 +13,13 @@
   background: transparent;
   min-height: 86px;
   width: 427px;
+  
+  @include mobile {
+    width: 100%;
+    min-height: auto;
+    padding: 12px;
+    border-radius: 8px;
+  }
 
   &:hover:not(&--disabled) {
     background: rgba(255, 255, 255, 0.05);
@@ -44,6 +51,12 @@
     font-size: $font-size-xl;
     font-weight: bold;
     flex-shrink: 0;
+    
+    @include mobile {
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+    }
   }
 
   &__text {
@@ -54,6 +67,12 @@
     width: 334px;
     text-align: left;
     font-weight: 700;
+    
+    @include mobile {
+      width: auto;
+      font-size: 14px;
+      font-weight: 600;
+    }
   }
 
   &__icon {

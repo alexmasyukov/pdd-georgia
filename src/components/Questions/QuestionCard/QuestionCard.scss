@@ -11,6 +11,12 @@
   width: 854px;
   font-family: 'font4', sans-serif;
   color: #e8e6e3;
+  
+  @include mobile {
+    width: 100%;
+    margin-bottom: 0;
+    border-radius: 8px;
+  }
 
   &__image-section {
     position: relative;
@@ -22,6 +28,15 @@
       width: 100%;
       height: auto;
       display: block;
+    }
+    
+    @include mobile {
+      min-height: 100px;
+      
+      a {
+        display: block;
+        cursor: pointer;
+      }
     }
   }
 
@@ -59,6 +74,12 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    
+    @include mobile {
+      padding: 16px;
+      font-size: 14px;
+      text-align: left;
+    }
   }
 
   &__hint-button {
@@ -142,6 +163,13 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, minmax(86px, auto));
+    
+    @include mobile {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      gap: 8px;
+      padding: 0 12px 12px;
+    }
   }
 
   &__actions {

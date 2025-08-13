@@ -6,10 +6,50 @@
   flex-direction: column;
   gap: $spacing-lg;
   
+  &__toggle {
+    display: none;
+    
+    @include mobile {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 12px 16px;
+      background: $bg-category;
+      border: none;
+      color: $text-primary;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: $transition-fast;
+      
+      &:hover {
+        background: $bg-category-active;
+      }
+      
+      span {
+        flex: 1;
+        text-align: left;
+      }
+      
+      svg {
+        flex-shrink: 0;
+      }
+    }
+  }
+  
   &__items {
     display: flex;
     flex-direction: column;
     gap: 0; // Categories will handle their own spacing
+    
+    @include mobile {
+      display: none;
+      
+      &--expanded {
+        display: flex;
+      }
+    }
   }
 
   &__loader,

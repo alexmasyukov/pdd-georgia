@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import CategoryItem from '../CategoryItem/CategoryItem';
 import CategoryService from '@services/CategoryService';
 import useCategoryUpdateStore from '@stores/useCategoryUpdateStore';
@@ -12,11 +13,19 @@ const CategoryList: React.FC = () => {
   const [categoriesStats, setCategoriesStats] = useState<Record<string, CategoryStats>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
   const needToCategoryButtonsUpdate = useCategoryUpdateStore(state => state.needToCategoryButtonsUpdate);
 
   useEffect(() => {
     loadCategories();
   }, []);
+
+  // Auto-close categories on mobile when category changes
+  useEffect(() => {
+    if (activeCategoryId && window.innerWidth <= 767) {
+      setIsExpanded(false);
+    }
+  }, [activeCategoryId]);
 
   useEffect(() => {
     if (needToCategoryButtonsUpdate && activeCategoryId) {
@@ -69,7 +78,16 @@ const CategoryList: React.FC = () => {
 
   return (
     <div className="category-list">
-      <div className="category-list__items">
+      <button 
+        className="category-list__toggle"
+        onClick={() => setIsExpanded(!isExpanded)}
+        type="button"
+        aria-label={isExpanded ? 'Скрыть категории' : 'Показать категории'}
+      >
+        <span>Категории</span>
+        {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+      </button>
+      <div className={`category-list__items ${isExpanded ? 'category-list__items--expanded' : ''}`}>
         {categories.map(category => (
           <CategoryItem
             key={category.id}

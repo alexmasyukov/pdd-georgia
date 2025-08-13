@@ -6,10 +6,77 @@
   align-items: center;
   justify-content: center;
   min-height: 400px;
+  
+  @include mobile {
+    min-height: 200px;
+    padding: 20px;
+  }
+
+  &__content {
+    text-align: center;
+  }
+
+  &__title {
+    font-size: 32px;
+    font-weight: bold;
+    color: $text-primary;
+    margin-bottom: 24px;
+    
+    @include mobile {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__stats {
+    margin-bottom: 32px;
+  }
+
+  &__stat {
+    font-size: 18px;
+    color: $text-primary;
+    margin-bottom: 8px;
+    
+    strong {
+      color: #4ade80;
+      font-size: 20px;
+    }
+    
+    @include mobile {
+      font-size: 16px;
+      
+      strong {
+        font-size: 18px;
+      }
+    }
+  }
+
+  &__update {
+    font-size: 14px;
+    color: $text-secondary;
+    margin-top: 12px;
+    
+    @include mobile {
+      font-size: 12px;
+    }
+  }
+
+  &__instruction {
+    color: $text-secondary;
+    font-size: $font-size-large;
+    
+    @include mobile {
+      font-size: 14px;
+    }
+  }
 
   &__empty {
     text-align: center;
     color: $text-secondary;
     font-size: $font-size-large;
+    
+    @include mobile {
+      font-size: 14px;
+    }
   }
 }

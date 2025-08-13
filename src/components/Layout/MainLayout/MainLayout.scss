@@ -27,17 +27,37 @@
       background: rgba(255, 255, 255, 0.1);
       border-radius: 4px;
     }
+
+    @include mobile {
+      flex-direction: column;
+      padding: 0;
+      gap: 0;
+      justify-content: flex-start;
+    }
   }
 
   &__sidebar {
     width: $sidebar-width;
     flex-shrink: 0;
     height: fit-content;
+
+    @include mobile {
+      width: 100%;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: $bg-dark;
+    }
   }
 
   &__content {
     width: 854px;
     flex-shrink: 0;
     height: fit-content;
+
+    @include mobile {
+      width: 100%;
+      padding: 0 10px;
+    }
   }
 }

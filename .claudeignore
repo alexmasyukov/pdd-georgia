@@ -174,3 +174,4 @@ playwright/
 # Miscellaneous
 **/node_modules/
 **/dist/
+ai/

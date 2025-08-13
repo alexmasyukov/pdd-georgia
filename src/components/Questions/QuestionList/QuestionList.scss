@@ -11,6 +11,10 @@
 
   &__items {
     margin-bottom: $spacing-lg;
+    
+    @include mobile {
+      margin-bottom: 0;
+    }
   }
 
   &__empty-message {
