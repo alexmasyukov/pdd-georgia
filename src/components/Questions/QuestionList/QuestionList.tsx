@@ -27,14 +27,6 @@ const QuestionList: React.FC<QuestionListProps> = ({
   );
   const [refreshKey, setRefreshKey] = useState(0);
 
-  useEffect(() => {
-    console.log('currentPage', currentPage)
-    const t = setTimeout(() => {
-      const el = document.scrollingElement || document.documentElement; // html
-      el.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    }, 1000);
-    return () => clearTimeout(t);
-  }, [currentPage]);
 
   useEffect(() => {
     // Reset to first page when questions change
@@ -43,9 +35,7 @@ const QuestionList: React.FC<QuestionListProps> = ({
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 1000);
+
   };
 
   const handleItemsPerPageChange = (value: number) => {
