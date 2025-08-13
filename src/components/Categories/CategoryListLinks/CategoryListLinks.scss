@@ -12,7 +12,9 @@
     font-size: 14px;
     transition: color 0.2s ease;
 
-
+    @include mobile {
+      font-size: 13px;
+    }
 
     &--active {
       color: #ee8787;
