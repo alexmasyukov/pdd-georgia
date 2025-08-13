@@ -25,7 +25,6 @@ const QuestionList: React.FC<QuestionListProps> = ({
   const [itemsPerPage, setItemsPerPage] = useState(
     LocalStorageService.getSettings().perPage
   );
-  const [refreshKey, setRefreshKey] = useState(0);
 
 
   useEffect(() => {
@@ -44,10 +43,6 @@ const QuestionList: React.FC<QuestionListProps> = ({
     setCurrentPage(1);
   };
 
-  const handleQuestionUpdate = () => {
-    // Force re-render to update stats
-    setRefreshKey(prev => prev + 1);
-  };
 
   // Sort questions by id
   const sortedQuestions = [...questions].sort((a, b) => a.id - b.id);
@@ -66,8 +61,9 @@ const QuestionList: React.FC<QuestionListProps> = ({
     );
   }
 
+
   return (
-    <div className="question-list" key={refreshKey}>
+    <div className="question-list" >
       {title && <h2 className="question-list__title">{title}</h2>}
       
       <div className="question-list__items">
@@ -76,7 +72,6 @@ const QuestionList: React.FC<QuestionListProps> = ({
             key={question.id}
             question={question}
             showDetailedHint={showDetailedHint}
-            onQuestionUpdate={handleQuestionUpdate}
           />
         ))}
       </div>
