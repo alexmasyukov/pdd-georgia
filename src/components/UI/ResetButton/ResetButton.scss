@@ -1,0 +1,83 @@
+@import '@styles/variables';
+@import '@styles/mixins';
+
+.reset-button {
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  
+  &--filled {
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    
+    &:hover {
+      background-color: #b91c1c;
+    }
+    
+    &:active {
+      background-color: #991b1b;
+    }
+  }
+  
+  &--outlined {
+    background-color: transparent;
+    border-width: 1px;
+    border-style: solid;
+    
+    &.reset-button--red {
+      color: #ef4444;
+      border-color: #ef4444;
+      
+      &:hover {
+        background-color: rgba(239, 68, 68, 0.1);
+        color: #f87171;
+        border-color: #f87171;
+      }
+      
+      &:active {
+        background-color: rgba(239, 68, 68, 0.2);
+      }
+    }
+    
+    &.reset-button--gray {
+      color: #6b7280;
+      border-color: #6b7280;
+      
+      &:hover {
+        background-color: rgba(107, 114, 128, 0.1);
+        color: #9ca3af;
+        border-color: #9ca3af;
+      }
+      
+      &:active {
+        background-color: rgba(107, 114, 128, 0.2);
+      }
+    }
+  }
+  
+  &--small {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+  }
+  
+  &--medium {
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 6px;
+  }
+  
+  @include mobile {
+    &--medium {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+    
+    &--small {
+      padding: 5px 10px;
+      font-size: 11px;
+    }
+  }
+}

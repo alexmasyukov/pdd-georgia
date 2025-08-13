@@ -79,4 +79,12 @@
       font-size: 14px;
     }
   }
+
+  &__reset {
+    margin-top: 32px;
+    
+    @include mobile {
+      margin-top: 24px;
+    }
+  }
 }

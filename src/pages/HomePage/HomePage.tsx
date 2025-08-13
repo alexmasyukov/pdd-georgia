@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CategoryService from '@services/CategoryService';
+import ResetButton from '@components/UI/ResetButton/ResetButton';
 import './HomePage.scss';
 
 const HomePage: React.FC = () => {
@@ -7,6 +8,8 @@ const HomePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    
     const loadStats = async () => {
       try {
         const stats = await CategoryService.getAllCategoriesStats();
@@ -33,6 +36,9 @@ const HomePage: React.FC = () => {
           </div>
         )}
         <p className="home-page__instruction">Выберите категорию слева для начала тестирования</p>
+        <div className="home-page__reset">
+          <ResetButton variant="outlined" />
+        </div>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import CategoryList from '@components/Categories/CategoryList/CategoryList';
 import Header from '@components/Layout/Header/Header';
+import Footer from '@components/Layout/Footer/Footer';
 import './MainLayout.scss';
 
 const MainLayout: React.FC = () => {
@@ -16,6 +17,7 @@ const MainLayout: React.FC = () => {
           <Outlet />
         </main>
       </div>
+      <Footer />
     </div>
   );
 };

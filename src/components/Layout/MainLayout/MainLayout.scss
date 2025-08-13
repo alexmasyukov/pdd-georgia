@@ -2,7 +2,7 @@
 @import '@styles/mixins';
 
 .main-layout {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   background: $bg-dark;
@@ -11,22 +11,8 @@
     flex: 1;
     display: flex;
     justify-content: center;
-    overflow-y: auto;
     padding: $spacing-xl 0;
     gap: 38px;
-    
-    &::-webkit-scrollbar {
-      width: 8px;
-    }
-    
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    
-    &::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-    }
 
     @include mobile {
       flex-direction: column;

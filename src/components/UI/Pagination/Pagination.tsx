@@ -20,6 +20,11 @@ const Pagination: React.FC<PaginationProps> = ({
   onPageChange,
   onItemsPerPageChange,
 }) => {
+  const handlePageChange = (page: number) => {
+    onPageChange(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
     const maxVisible = 5;
@@ -87,7 +92,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className="pagination__pages">
         <button
           className="pagination__button pagination__button--prev"
-          onClick={() => onPageChange(currentPage - 1)}
+          onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
           aria-label="Предыдущая страница"
         >
@@ -105,7 +110,7 @@ const Pagination: React.FC<PaginationProps> = ({
               className={`pagination__button ${
                 currentPage === page ? 'pagination__button--active' : ''
               }`}
-              onClick={() => onPageChange(page as number)}
+              onClick={() => handlePageChange(page as number)}
             >
               {page}
             </button>
@@ -114,7 +119,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
         <button
           className="pagination__button pagination__button--next"
-          onClick={() => onPageChange(currentPage + 1)}
+          onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
           aria-label="Следующая страница"
         >
