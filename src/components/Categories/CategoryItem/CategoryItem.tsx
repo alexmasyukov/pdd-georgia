@@ -18,6 +18,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
 
   const handleCategoryClick = () => {
     navigate(`/category/${category.id}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const favoriteCount = stats?.favoriteCount || 0;
@@ -40,6 +41,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
           <NavLink 
             to={`/category/${category.id}/favorites`}
             className={({ isActive }) => `category-item__link ${isActive ? 'category-item__link--active' : ''}`}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             избранное ({favoriteCount})
           </NavLink>
@@ -49,6 +51,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
           <NavLink 
             to={`/category/${category.id}/known`}
             className={({ isActive }) => `category-item__link ${isActive ? 'category-item__link--active' : ''}`}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             точно знаю ({knownCount})
           </NavLink>
@@ -58,6 +61,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
           <NavLink 
             to={`/category/${category.id}/hard`}
             className={({ isActive }) => `category-item__link ${isActive ? 'category-item__link--active' : ''}`}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             сложные ({hardCount})
           </NavLink>
